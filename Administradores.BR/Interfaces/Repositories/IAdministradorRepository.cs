@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Administradores.Models.Administradores.DTOs;
 using Administradores.Models.Administradores.Models;
 
 namespace Administradores.BR.Interfaces.Repositories
@@ -29,5 +30,7 @@ namespace Administradores.BR.Interfaces.Repositories
         Task<bool> ExisteUsuarioAsync(string nombreUsuario, int idExcluir);
 
         Task<bool> EsSuperAdminAsync(int id);
+
+        Task<IEnumerable<EstudianteExportacionDto>> ListarEstudiantesCarrerasInfoAcaAsync();
     }
 }

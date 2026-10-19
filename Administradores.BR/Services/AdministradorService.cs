@@ -368,5 +368,27 @@ namespace Administradores.BR.Services
                 return Result<string>.Fail("No se pudo verificar el acceso por un error de persistencia.", ErrorType.Unexpected);
             }
         }
+
+        public async Task<Result<IEnumerable<EstudianteExportacionDto>>> ExportarEstudiantesExcelAsync()
+        {
+            try
+            {
+                var estudiantes = (await _adminRepository.ListarEstudiantesCarrerasInfoAcaAsync()).ToList();
+
+                if (!estudiantes.Any())
+                {
+                    return Result<IEnumerable<EstudianteExportacionDto>>.Fail("No hay inscripciones hechas.", ErrorType.NotFound);
+                }
+
+                return Result<IEnumerable<EstudianteExportacionDto>>.Ok(estudiantes);
+            }
+            catch (DataAccessException)
+            {
+                return Result<IEnumerable<EstudianteExportacionDto>>.Fail(
+                    "No se pudieron obtener los estudiantes para la exportación por un error de persistencia.",
+                    ErrorType.Unexpected
+                );
+            }
+        }
     }
 }

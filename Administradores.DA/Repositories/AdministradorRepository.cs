@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Administradores.BR.Interfaces.Repositories;
+using Administradores.Models.Administradores.DTOs;
 using Administradores.Models.Administradores.Models;
 using Administradores.Models.Exceptions;
 using Dapper;
@@ -176,6 +177,25 @@ namespace Administradores.DA.Repositories
                 throw new DataAccessException(
                     "Error al consultar las credenciales del administrador.",
                     ex);
+            }
+        }
+
+        public async Task<IEnumerable<EstudianteExportacionDto>> ListarEstudiantesCarrerasInfoAcaAsync()
+        {
+            try
+            {
+                using var connection = new SqlConnection(_connectionString);
+
+                var estudiantes = await connection.QueryAsync<EstudianteExportacionDto>(
+                    "SP_ExportacionDelExcel",
+                    commandType: CommandType.StoredProcedure
+                );
+
+                return estudiantes;
+            }
+            catch (SqlException ex)
+            {
+                throw new DataAccessException("Error al obtener los estudiantes para la exportación.", ex);
             }
         }
     }

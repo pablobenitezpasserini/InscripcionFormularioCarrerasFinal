@@ -259,6 +259,38 @@ app.MapPost("/api/admin/login", async (AdminLoginRequestDto data, IAdministrador
 .ProducesProblem(StatusCodes.Status500InternalServerError);
 
 
+
+app.MapGet("/api/admin/exportar-estudiantes", async (IAdministradorService service) =>
+{
+    var result = await service.ExportarEstudiantesExcelAsync();
+
+    if (result.Success)
+    {
+        return Results.Ok(result.Data);
+    }
+
+    if (result.ErrorType == ErrorType.NotFound)
+    {
+        return Results.Problem(
+            title: "Inscripciones no encontradas",
+            detail: result.Error,
+            statusCode: StatusCodes.Status404NotFound);
+    }
+
+    return Results.Problem(
+        title: "Error interno del servidor",
+        detail: "No se pudieron obtener los estudiantes para la exportación por un error interno.",
+        statusCode: StatusCodes.Status500InternalServerError);
+})
+.WithTags("Administradores")
+.WithSummary("Exportar estudiantes para Excel")
+.WithDescription("Devuelve un listado de estudiantes inscritos con su información académica.")
+.Produces<IEnumerable<EstudianteExportacionDto>>(StatusCodes.Status200OK)
+.ProducesProblem(StatusCodes.Status404NotFound)
+.ProducesProblem(StatusCodes.Status500InternalServerError);
+
+
+
 // Endpoints formularios
 app.MapGet("/api/formularios", async (
     IHabilitacionFormularioService service) =>

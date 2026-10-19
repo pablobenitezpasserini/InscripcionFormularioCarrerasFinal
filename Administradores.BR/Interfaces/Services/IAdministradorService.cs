@@ -19,5 +19,7 @@ namespace Administradores.BR.Interfaces.Services
         Task<Result<bool>> EliminarAsync(int id);
 
         Task<Result<string>> LoguearAsync(string usuario, string contrasena);
+
+        Task<Result<IEnumerable<EstudianteExportacionDto>>> ExportarEstudiantesExcelAsync();
     }
 }
