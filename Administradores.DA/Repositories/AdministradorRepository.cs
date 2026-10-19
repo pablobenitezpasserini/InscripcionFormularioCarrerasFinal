@@ -99,34 +99,145 @@ namespace Administradores.DA.Repositories
             }
         }
 
-        public Task<bool> EsSuperAdminAsync(int id)
+        public async Task<bool> EsSuperAdminAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using var connection = new SqlConnection(_connectionString);
+
+                var parameters = new DynamicParameters();
+
+                parameters.Add("@Id", id);
+
+                return await connection.QuerySingleAsync<bool>(
+                    "SP_Administrador_EsSuperAdmin",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+            }
+            catch (SqlException ex)
+            {
+                throw new DataAccessException(
+                    "Error al verificar si el administrador es superadministrador.",
+                    ex);
+            }
         }
 
-        public Task<bool> ExisteDniAsync(string dni, string tipoDni)
+        public async Task<bool> ExisteDniAsync(string dni, string tipoDni)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using var connection = new SqlConnection(_connectionString);
+
+                var parameters = new DynamicParameters();
+
+                parameters.Add("@Dni", dni);
+                parameters.Add("@TipoDni", tipoDni);
+
+                return await connection.QuerySingleAsync<bool>(
+                    "SP_Administrador_ExisteDni",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+            }
+            catch (SqlException ex)
+            {
+                throw new DataAccessException(
+                    "Error al verificar si existe el DNI del administrador.",
+                    ex);
+            }
+        }
+        public async Task<bool> ExisteDniAsync(string dni, string tipoDni, int idExcluir)
+        {
+            try
+            {
+                using var connection = new SqlConnection(_connectionString);
+
+                var parameters = new DynamicParameters();
+
+                parameters.Add("@Dni", dni);
+                parameters.Add("@TipoDni", tipoDni);
+                parameters.Add("@IdExcluir", idExcluir);
+
+                return await connection.QuerySingleAsync<bool>(
+                    "SP_Administrador_ExisteDni_Excluir",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+            }
+            catch (SqlException ex)
+            {
+                throw new DataAccessException(
+                    "Error al verificar si existe el DNI del administrador excluyendo su ID.",
+                    ex);
+            }
         }
 
-        public Task<bool> ExisteDniAsync(string dni, string tipoDni, int idExcluir)
+        public async Task<bool> ExistePorIdAsync(int id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using var connection = new SqlConnection(_connectionString);
+
+                var parameters = new DynamicParameters();
+
+                parameters.Add("@Id", id);
+
+                return await connection.QuerySingleAsync<bool>(
+                    "SP_Administrador_ExistePorId",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+            }
+            catch (SqlException ex)
+            {
+                throw new DataAccessException(
+                    "Error al verificar si existe el administrador por su ID.",
+                    ex);
+            }
         }
 
-        public Task<bool> ExistePorIdAsync(int id)
+        public async Task<bool> ExisteUsuarioAsync(string nombreUsuario)
         {
-            throw new NotImplementedException();
+            try
+            {
+                using var connection = new SqlConnection(_connectionString);
+
+                var parameters = new DynamicParameters();
+
+                parameters.Add("@NombreUsuario", nombreUsuario);
+
+                return await connection.QuerySingleAsync<bool>(
+                    "SP_Administrador_ExisteUsuario",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+            }
+            catch (SqlException ex)
+            {
+                throw new DataAccessException(
+                    "Error al verificar si existe el nombre de usuario del administrador.",
+                    ex);
+            }
         }
 
-        public Task<bool> ExisteUsuarioAsync(string nombreUsuario)
+        public async Task<bool> ExisteUsuarioAsync(string nombreUsuario, int idExcluir)
         {
-            throw new NotImplementedException();
-        }
+            try
+            {
+                using var connection = new SqlConnection(_connectionString);
 
-        public Task<bool> ExisteUsuarioAsync(string nombreUsuario, int idExcluir)
-        {
-            throw new NotImplementedException();
+                var parameters = new DynamicParameters();
+
+                parameters.Add("@NombreUsuario", nombreUsuario);
+                parameters.Add("@IdExcluir", idExcluir);
+
+                return await connection.QuerySingleAsync<bool>(
+                    "SP_Administrador_ExisteUsuario_Excluir",
+                    parameters,
+                    commandType: CommandType.StoredProcedure);
+            }
+            catch (SqlException ex)
+            {
+                throw new DataAccessException(
+                    "Error al verificar si existe el nombre de usuario del administrador excluyendo su ID.",
+                    ex);
+            }
         }
 
         public async Task<IEnumerable<Administrador>> ListarAsync()

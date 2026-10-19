@@ -12,7 +12,10 @@ using Administradores.Models.Results;
 var builder = WebApplication.CreateBuilder(args);
 
 // Generación del documento OpenAPI
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(options =>
+{
+    options.OpenApiVersion = Microsoft.OpenApi.OpenApiSpecVersion.OpenApi3_0;
+});
 
 // Configuración de la conexión
 var connectionString =
