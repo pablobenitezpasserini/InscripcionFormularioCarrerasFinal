@@ -1,4 +1,3 @@
-
 using Administradores.BR.Interfaces.Repositories;
 using Administradores.BR.Interfaces.Services;
 using Administradores.BR.Services;
@@ -34,7 +33,23 @@ builder.Services.AddSingleton<IHabilitacionFormularioRepository>(
 
 builder.Services.AddSingleton<IHabilitacionFormularioService, HabilitacionFormularioService>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("FrontendPolicy", policy =>
+    {
+        policy
+            .WithOrigins(
+                "http://127.0.0.1:5500",
+                "http://localhost:5500")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
+
 var app = builder.Build();
+
+app.UseCors("FrontendPolicy");
 
 // OpenAPI y Swagger UI solo en desarrollo
 if (app.Environment.IsDevelopment())
