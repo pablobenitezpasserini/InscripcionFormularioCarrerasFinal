@@ -1,0 +1,188 @@
+
+/* Estilo general */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #123474;
+    margin: 0;
+    min-height: 100vh;
+}
+
+/* Contenedor principal del menú */
+.form-container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+    width: 100%;
+    max-width: 650px;
+
+    padding: 30px 40px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+/* Banner */
+.banner {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+/* Títulos */
+.form-container h2 {
+    color: #202124;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.form-container h3 {
+    color: #202124;
+    text-align: left;
+}
+
+/* Párrafos */
+.form-container p {
+    color: #5f6368;
+    margin-bottom: 30px;
+}
+
+/* Labels */
+.form-container .form-label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #202124;
+    text-align: left;
+}
+
+/* Campos de formulario */
+.form-container .form-control,
+.form-container .form-select {
+    padding: 10px 12px;
+    border-radius: 5px;
+    border: 1px solid #dadce0;
+    font-size: 15px;
+}
+
+/* Foco de los campos */
+.form-container .form-control:focus,
+.form-container .form-select:focus {
+    border-color: #1a73e8;
+    box-shadow: 0 0 0 0.15rem rgba(26, 115, 232, 0.2);
+}
+
+/* Botones generales */
+.form-container .btn {
+    width: 100%;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    transition: background-color 0.2s ease;
+}
+
+/* Botones azules y enlaces de navegación */
+.form-container .btn-primary,
+.form-container a.btn-primary {
+    background-color: #1a73e8;
+    border-color: #1a73e8;
+    color: white;
+}
+
+.form-container .btn-primary:hover,
+.form-container a.btn-primary:hover {
+    background-color: #155ab6;
+    border-color: #155ab6;
+    color: white;
+}
+
+/* Botones verdes */
+.form-container #login,
+.form-container #reg,
+.form-container .btn-success {
+    background-color: green;
+    border-color: green;
+    color: white;
+}
+
+.form-container #login:hover,
+.form-container #reg:hover,
+.form-container .btn-success:hover {
+    background-color: darkgreen;
+    border-color: darkgreen;
+}
+
+/* Botones de cancelar y cerrar sesión */
+.form-container #cancelLogin,
+.form-container #cancelRegister,
+.form-container #logout,
+.form-container .btn-danger {
+    background-color: red;
+    border-color: red;
+    color: white;
+}
+
+.form-container #cancelLogin:hover,
+.form-container #cancelRegister:hover,
+.form-container #logout:hover,
+.form-container .btn-danger:hover {
+    background-color: darkred;
+    border-color: darkred;
+}
+
+/* Enlaces que funcionan como botones */
+.form-container a {
+    text-decoration: none;
+}
+
+/* Accesibilidad: foco visible */
+.form-container .btn:focus-visible {
+    outline: 3px solid #8ab4f8;
+    outline-offset: 3px;
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+    .form-container {
+        padding: 25px 20px;
+    }
+
+    .form-container h2 {
+        font-size: 24px;
+    }
+
+    .form-container .btn {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+/* Celulares */
+@media (max-width: 480px) {
+    .form-container {
+        padding: 20px 15px;
+        border-radius: 8px;
+    }
+
+    .banner {
+        margin-bottom: 20px;
+    }
+
+    .form-container h2 {
+        font-size: 21px;
+    }
+
+    .form-container .form-control,
+    .form-container .form-select {
+        font-size: 14px;
+        padding: 9px 10px;
+    }
+
+    .form-container .btn {
+        padding: 10px;
+        font-size: 15px;
+    }
+}

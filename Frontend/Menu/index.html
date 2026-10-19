@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Menú del Administrador</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- CSS propio -->
+    <link rel="stylesheet" href="./menu.css">
+</head>
+
+<body>
+    <main class="container-fluid min-vh-100 d-flex justify-content-center align-items-center py-4">
+        <div class="form-container">
+
+            <!-- Banner -->
+            <img src="../img/banner.jpg" alt="Banner principal" class="banner img-fluid">
+
+            <!-- Título -->
+            <h2>Menú del Administrador</h2>
+
+            <hr>
+
+            <p class="fw-bold mb-4">
+                Seleccione la opción deseada.
+            </p>
+
+            <!-- Opciones del menú -->
+            <nav class="d-grid gap-3">
+                <a href="1-administrador.html" class="btn btn-primary">
+                    Administrador
+                </a>
+
+                <a href="2-carrera.html" class="btn btn-primary">
+                    Carrera
+                </a>
+
+                <a href="3-informacion-academica.html" class="btn btn-primary">
+                    Información Académica
+                </a>
+
+                <a href="4-formulario.html" class="btn btn-primary">
+                    Formulario
+                </a>
+
+                <a href="5-listados.html" class="btn btn-primary">
+                    Listados
+                </a>
+
+                <a href="6-descargas.html" class="btn btn-primary">
+                    Descargas
+                </a>
+            </nav>
+
+            <hr class="my-4">
+
+            <!-- Cerrar sesión -->
+            <button id="logout" type="button" class="btn btn-danger mb-0">
+                Cerrar sesión
+            </button>
+
+        </div>
+    </main>
+
+    <!-- Protección de la página -->
+    <script type="module">
+        import { protegerPagina } from "../js/auth.js";
+
+        protegerPagina();
+    </script>
+
+    <!-- JavaScript del menú -->
+    <script type="module" src="./menu.js"></script>
+</body>
+
+</html>
