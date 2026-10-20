@@ -46,10 +46,13 @@ async function cargarAdministradores() {
             botonEditar.textContent = "Editar";
 
             botonEditar.addEventListener("click", () => {
-                const id = fila.dataset.id;
+                sessionStorage.setItem(
+                    "adminEditar",
+                    JSON.stringify(admin)
+                );
 
                 window.location.href =
-                    `./editar.html?id=${encodeURIComponent(id)}`;
+                    `./editar.html?id=${encodeURIComponent(admin.iD_Admin)}`;
             });
 
             const botonEliminar = document.createElement("button");

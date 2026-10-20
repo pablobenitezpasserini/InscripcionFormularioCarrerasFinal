@@ -1,0 +1,17 @@
+.form-container {
+    max-width: 650px;
+}
+
+#editarAdminForm {
+    width: 100%;
+}
+
+#editarAdminForm .btn {
+    min-height: 44px;
+}
+
+@media (max-width: 480px) {
+    #editarAdminForm .btn {
+        width: 100%;
+    }
+}

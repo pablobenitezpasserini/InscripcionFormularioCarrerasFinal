@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar administrador</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../CSS/global.css">
+    <link rel="stylesheet" href="../CSS/administradores/editar.css">
+</head>
+
+<body>
+
+    <main class="container-fluid min-vh-100 d-flex justify-content-center align-items-start py-4">
+        <div class="form-container">
+
+            <img src="../img/banner.jpg" alt="Banner principal" class="banner img-fluid">
+
+            <h2 class="mb-3">Editar administrador</h2>
+
+            <hr>
+
+            <p class="text-secondary mb-4">
+                Modificá los datos del administrador seleccionado.
+            </p>
+
+            <div id="mensaje" class="mb-3" role="status"></div>
+
+            <form id="editarAdminForm">
+
+                <div class="mb-3 text-start">
+                    <label for="nombreApellido" class="form-label">
+                        Nombre y apellido
+                    </label>
+                    <input type="text" id="nombreApellido" class="form-control" maxlength="100" required>
+                </div>
+
+                <div class="mb-3 text-start">
+                    <label for="tipoDni" class="form-label">
+                        Tipo de documento
+                    </label>
+                    <select id="tipoDni" class="form-select" required>
+                        <option value="">Seleccioná un tipo</option>
+                        <option value="DNI">DNI</option>
+                        <option value="Pasaporte">Pasaporte</option>
+                        <option value="LC">LC</option>
+                        <option value="LE">LE</option>
+                    </select>
+                </div>
+
+                <div class="mb-3 text-start">
+                    <label for="dni" class="form-label">DNI</label>
+                    <input type="text" id="dni" class="form-control" maxlength="8" inputmode="numeric" pattern="[0-9]+"
+                        title="El DNI solo puede contener números." required>
+                </div>
+
+                <div class="mb-3 text-start">
+                    <label for="nombreUsuario" class="form-label">
+                        Nombre de usuario
+                    </label>
+                    <input type="text" id="nombreUsuario" class="form-control" maxlength="30" required>
+                </div>
+
+                <div class="mb-3 text-start">
+                    <label for="contrasena" class="form-label">
+                        Contraseña actual
+                    </label>
+                    <input type="password" id="contrasena" class="form-control" maxlength="255"
+                        autocomplete="new-password" required>
+                    <small class="text-secondary">
+                        La contraseña es obligatoria según las validaciones actuales del servidor.
+                    </small>
+                </div>
+
+                <div class="d-flex flex-column flex-sm-row gap-2 mt-4">
+                    <button type="submit" id="botonGuardar" class="btn btn-primary flex-fill">
+                        Guardar cambios
+                    </button>
+
+                    <a href="./index.html" class="btn btn-secondary flex-fill">
+                        Cancelar
+                    </a>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+    <script type="module" src="../JS/administradores/editar.js"></script>
+</body>
+
+</html>
