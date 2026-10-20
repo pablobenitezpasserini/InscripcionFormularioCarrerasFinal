@@ -310,8 +310,7 @@ app.MapGet("/api/admin/exportar-estudiantes", async (IAdministradorService servi
 
 
 // Endpoints formularios
-app.MapGet("/api/formularios", async (
-    IHabilitacionFormularioService service) =>
+app.MapGet("/api/formularios", async (IHabilitacionFormularioService service) =>
 {
     var result = await service.GetAllAsync();
 

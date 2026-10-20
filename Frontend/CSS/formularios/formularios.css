@@ -1,0 +1,90 @@
+/* Contenedor del listado */
+.form-container {
+    width: 100%;
+    max-width: 1100px;
+}
+
+/* Banner */
+.banner {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+/* Tabla */
+.table-responsive {
+    width: 100%;
+    margin-top: 20px;
+    border-radius: 6px;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
+/* Encabezado */
+.table thead th {
+    background-color: #1a73e8;
+    color: white;
+    border-color: #155ab6;
+    font-weight: 500;
+    padding: 14px 12px;
+}
+
+/* Celdas */
+.table tbody td {
+    padding: 12px;
+    color: #202124;
+}
+
+/* Filas alternadas */
+.table-striped>tbody>tr:nth-of-type(odd)>* {
+    background-color: #f2f5fa;
+}
+
+/* Efecto al pasar el cursor */
+.table-hover>tbody>tr:hover>* {
+    background-color: #e3ecfb;
+}
+
+/* Evitar que los datos se partan en varias líneas */
+.table th,
+.table td {
+    white-space: nowrap;
+}
+
+/* Mensaje de carga o error */
+#mensaje {
+    color: #5f6368;
+}
+
+#mensaje:empty {
+    display: none;
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+
+    .table thead th,
+    .table tbody td {
+        padding: 10px 8px;
+        font-size: 14px;
+    }
+}
+
+/* Celulares */
+@media (max-width: 480px) {
+
+    .table thead th,
+    .table tbody td {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    .table .btn {
+        margin-bottom: 4px;
+    }
+}
