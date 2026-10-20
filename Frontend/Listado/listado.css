@@ -1,0 +1,236 @@
+/* Contenedor principal */
+.form-container {
+    width: 100%;
+    max-width: 1500px;
+    min-width: 0;
+}
+
+/* Banner */
+.banner {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+/* Títulos */
+.titulo-listado {
+    margin-bottom: 6px;
+    color: #202124;
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.descripcion-listado {
+    margin-bottom: 20px;
+    color: #5f6368;
+    font-size: 14px;
+}
+
+/* Barra de herramientas */
+.barra-herramientas {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.buscador-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 220px;
+    max-width: 450px;
+    padding: 8px 12px;
+    background-color: #f1f3f4;
+    border: 1px solid #dadce0;
+    border-radius: 6px;
+}
+
+.buscador-container i {
+    color: #5f6368;
+}
+
+.buscador-container input {
+    width: 100%;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+.cantidad-registros {
+    color: #5f6368;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+/* Área de la planilla */
+.planilla-container {
+    width: 100%;
+    height: 65vh;
+    min-height: 300px;
+    overflow: auto;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    background-color: #ffffff;
+}
+
+/* Tabla */
+.tabla-inscripciones {
+    width: 100%;
+    min-width: 1450px;
+    table-layout: fixed;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
+
+/* Anchos de las columnas */
+.tabla-inscripciones th:nth-child(1),
+.tabla-inscripciones td:nth-child(1) {
+    width: 145px;
+}
+
+.tabla-inscripciones th:nth-child(2),
+.tabla-inscripciones td:nth-child(2) {
+    width: 200px;
+}
+
+.tabla-inscripciones th:nth-child(3),
+.tabla-inscripciones td:nth-child(3) {
+    width: 145px;
+}
+
+.tabla-inscripciones th:nth-child(4),
+.tabla-inscripciones td:nth-child(4) {
+    width: 175px;
+}
+
+.tabla-inscripciones th:nth-child(5),
+.tabla-inscripciones td:nth-child(5) {
+    width: 95px;
+}
+
+.tabla-inscripciones th:nth-child(6),
+.tabla-inscripciones td:nth-child(6) {
+    width: 125px;
+}
+
+.tabla-inscripciones th:nth-child(7),
+.tabla-inscripciones td:nth-child(7) {
+    width: 140px;
+}
+
+.tabla-inscripciones th:nth-child(8),
+.tabla-inscripciones td:nth-child(8) {
+    width: 100px;
+}
+
+.tabla-inscripciones th:nth-child(9),
+.tabla-inscripciones td:nth-child(9) {
+    width: 190px;
+}
+
+.tabla-inscripciones th:nth-child(10),
+.tabla-inscripciones td:nth-child(10) {
+    width: 100px;
+}
+
+.tabla-inscripciones th:nth-child(11),
+.tabla-inscripciones td:nth-child(11) {
+    width: 180px;
+}
+
+.tabla-inscripciones th:nth-child(12),
+.tabla-inscripciones td:nth-child(12) {
+    width: 100px;
+}
+
+/* Encabezados fijos */
+.tabla-inscripciones thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: 9px 8px;
+    background-color: #f1f3f4;
+    color: #3c4043;
+    font-weight: 600;
+    text-align: left;
+    vertical-align: middle;
+    white-space: normal;
+    overflow-wrap: break-word;
+    border-right: 1px solid #dadce0;
+    border-bottom: 1px solid #bdc1c6;
+}
+
+/* Celdas */
+.tabla-inscripciones tbody td {
+    height: 30px;
+    padding: 5px 8px;
+    color: #202124;
+    background-color: #ffffff;
+    vertical-align: middle;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-right: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* Filas alternadas, muy sutiles */
+.tabla-inscripciones tbody tr:nth-child(even) td {
+    background-color: #fafafa;
+}
+
+/* Resaltar una fila al pasar el cursor */
+.tabla-inscripciones tbody tr:hover td {
+    background-color: #e8f0fe;
+}
+
+/* Última columna sin borde derecho */
+.tabla-inscripciones th:last-child,
+.tabla-inscripciones td:last-child {
+    border-right: none;
+}
+
+/* Pie */
+.pie-listado {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 18px;
+}
+
+/* Mensajes */
+#mensaje:empty {
+    display: none;
+}
+
+/* Pantallas pequeñas */
+@media (max-width: 576px) {
+    .titulo-listado {
+        font-size: 21px;
+    }
+
+    .barra-herramientas {
+        align-items: stretch;
+    }
+
+    .buscador-container {
+        max-width: none;
+        flex-basis: 100%;
+    }
+
+    .barra-herramientas .btn {
+        flex: 1;
+    }
+
+    .planilla-container {
+        height: 60vh;
+    }
+}
