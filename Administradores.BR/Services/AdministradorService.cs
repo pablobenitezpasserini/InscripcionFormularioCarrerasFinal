@@ -60,7 +60,7 @@ namespace Administradores.BR.Services
             var usuario = admin.Admin_Nom_Usuario.Trim();
             var contraseña = admin.Admin_Contra;
 
-            if (!dni.All(char.IsDigit))
+            if (dni.Any(c => c < '0' || c > '9'))
                 return Result<bool>.Fail(
                     "El DNI solo puede contener números.", ErrorType.Validation);
 
@@ -192,6 +192,10 @@ namespace Administradores.BR.Services
             var tipoDni = admin.Admin_Tipo_DNI.Trim();
             var usuario = admin.Admin_Nom_Usuario.Trim();
             var contraseña = admin.Admin_Contra;
+
+            if (dni.Any(c => c < '0' || c > '9'))
+                return Result<bool>.Fail(
+                    "El DNI solo puede contener números.", ErrorType.Validation);
 
             if (nombre.Length > 100)
             {
