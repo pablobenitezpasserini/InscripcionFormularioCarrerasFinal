@@ -1,0 +1,20 @@
+.form-container {
+    max-width: 650px;
+}
+
+/* El formulario ocupa el ancho disponible */
+#crearAdminForm {
+    width: 100%;
+}
+
+/* Evitar que los botones queden demasiado juntos */
+#crearAdminForm .btn {
+    min-height: 44px;
+}
+
+/* Ajustes para celulares */
+@media (max-width: 480px) {
+    #crearAdminForm .btn {
+        width: 100%;
+    }
+}

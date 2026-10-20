@@ -60,6 +60,10 @@ namespace Administradores.BR.Services
             var usuario = admin.Admin_Nom_Usuario.Trim();
             var contraseña = admin.Admin_Contra;
 
+            if (!dni.All(char.IsDigit))
+                return Result<bool>.Fail(
+                    "El DNI solo puede contener números.", ErrorType.Validation);
+
             if (nombre.Length > 100)
                 return Result<bool>.Fail(
                     "El nombre y apellido no pueden superar los 100 caracteres.", ErrorType.Validation);
@@ -258,7 +262,7 @@ namespace Administradores.BR.Services
                             ErrorType.Conflict);
                     }
                 }
-                
+
                 if (await _adminRepository.ExisteDniAsync(
                     dni, tipoDni, id))
                 {
