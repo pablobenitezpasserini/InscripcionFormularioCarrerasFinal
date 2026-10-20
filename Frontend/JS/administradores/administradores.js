@@ -23,7 +23,7 @@ async function cargarAdministradores() {
             const fila = document.createElement("tr");
 
             // ID oculto: no se muestra como columna.
-            fila.dataset.id = admin.id_Admin;
+            fila.dataset.id = admin.iD_Admin;
 
             const nombre = document.createElement("td");
             nombre.textContent = admin.admin_Nom_Ape;
@@ -61,10 +61,13 @@ async function cargarAdministradores() {
             botonEliminar.textContent = "Eliminar";
 
             botonEliminar.addEventListener("click", () => {
-                const id = fila.dataset.id;
+                sessionStorage.setItem(
+                    "adminEliminar",
+                    JSON.stringify(admin)
+                );
 
                 window.location.href =
-                    `./eliminar.html?id=${encodeURIComponent(id)}`;
+                    `./eliminar.html?id=${encodeURIComponent(admin.iD_Admin)}`;
             });
 
             acciones.append(botonEditar, botonEliminar);
