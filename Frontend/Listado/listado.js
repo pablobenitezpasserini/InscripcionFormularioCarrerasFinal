@@ -43,12 +43,27 @@ function obtenerValor(valor) {
     return String(valor);
 }
 
+function formatearFecha(valor) {
+    if (!valor) {
+        return "";
+    }
+
+    // Me quedo solamente con la parte de la fecha
+    const fecha = String(valor).split("T")[0];
+
+    // Separo año, mes y día mediante desestructuracion de array
+    const [año, mes, dia] = fecha.split("-");
+
+    // Devuelvo la fecha con formato día/mes/año
+    return `${dia}/${mes}/${año}`;
+}
+
 function renderizarTabla(lista) {
-    //limpio las filas existentes para renderizar de nuevo
+    // Limpio las filas existentes para renderizar de nuevo
     tablaEstudiantes.replaceChildren();
 
-    //creo un lugar temporal para almacenar las filas
-    //sin tener que agregarlas una por una al DOM
+    // Creo un lugar temporal para almacenar las filas
+    // sin tener que agregarlas una por una al DOM
     const fragmento = document.createDocumentFragment();
 
     lista.forEach(estudiante => {
@@ -56,11 +71,18 @@ function renderizarTabla(lista) {
 
         columnas.forEach(columna => {
             const celda = document.createElement("td");
-            celda.textContent = obtenerValor(estudiante[columna.clave]);
 
-            //si tiene texto
+            const valor = obtenerValor(estudiante[columna.clave]);
+
+            // Formateo solamente las columnas que contienen fechas
+            if (columna.clave === "fechaInscripcion" || columna.clave === "fechaNacimiento" || columna.clave === "añoEgreso") {
+                celda.textContent = formatearFecha(valor);
+            } else {
+                celda.textContent = valor;
+            }
+
+            // Si tiene texto, muestra una descripción al pasar el mouse
             if (celda.textContent) {
-                // muestra una descripcion con mouse hover
                 celda.title = celda.textContent;
             }
 
