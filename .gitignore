@@ -10,6 +10,7 @@
 
 **/TestResults/
 *.trx
+**/coverage/
 coverage/
 coverage.*
 *.coverage

@@ -3,4 +3,5 @@
   <Project Path="Administradores.BR/Administradores.BR.csproj" />
   <Project Path="Administradores.DA/Administradores.DA.csproj" />
   <Project Path="Administradores.Models/Administradores.Models.csproj" />
+  <Project Path="AdministradoresTest.BR/AdministradoresTest.BR.csproj" />
 </Solution>
