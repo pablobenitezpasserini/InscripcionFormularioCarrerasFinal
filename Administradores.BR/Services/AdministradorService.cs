@@ -266,6 +266,18 @@ namespace Administradores.BR.Services
                             ErrorType.Conflict);
                     }
                 }
+                else
+                {
+                    if (dni != "00000000" || !string.Equals(tipoDni, "DNI", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return Result<bool>.Fail("No se puede modificar el DNI ni el tipo de DNI del super administrador.", ErrorType.Conflict);
+                    }
+
+                    if (!string.Equals(usuario, "admin", StringComparison.OrdinalIgnoreCase))
+                    {
+                        return Result<bool>.Fail("No se puede modificar el nombre de usuario del super administrador.", ErrorType.Conflict);
+                    }
+                }
 
                 if (await _adminRepository.ExisteDniAsync(
                     dni, tipoDni, id))
