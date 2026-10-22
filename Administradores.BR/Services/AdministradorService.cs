@@ -102,7 +102,6 @@ namespace Administradores.BR.Services
 
         public async Task<Result<bool>> EditarAsync(int id, EditarAdminDto admin)
         {
-            // 1. Validar el ID
             if (id <= 0)
             {
                 return Result<bool>.Fail(
@@ -110,92 +109,20 @@ namespace Administradores.BR.Services
                     ErrorType.Validation);
             }
 
-            if (admin is null)
+            var errorValidacion = _validador.ValidarEditar(admin);
+
+            if (errorValidacion is not null)
             {
                 return Result<bool>.Fail(
-                    "Los datos del administrador son obligatorios.",
+                    errorValidacion,
                     ErrorType.Validation);
             }
 
-            if (string.IsNullOrWhiteSpace(admin.Admin_Nom_Ape))
-            {
-                return Result<bool>.Fail(
-                    "El nombre y apellido son obligatorios.",
-                    ErrorType.Validation);
-            }
-
-            if (string.IsNullOrWhiteSpace(admin.Admin_DNI))
-            {
-                return Result<bool>.Fail(
-                    "El DNI es obligatorio.",
-                    ErrorType.Validation);
-            }
-
-            if (string.IsNullOrWhiteSpace(admin.Admin_Tipo_DNI))
-            {
-                return Result<bool>.Fail(
-                    "El tipo de DNI es obligatorio.",
-                    ErrorType.Validation);
-            }
-
-            if (string.IsNullOrWhiteSpace(admin.Admin_Nom_Usuario))
-            {
-                return Result<bool>.Fail(
-                    "El nombre de usuario es obligatorio.",
-                    ErrorType.Validation);
-            }
-
-            if (string.IsNullOrWhiteSpace(admin.Admin_Contra))
-            {
-                return Result<bool>.Fail(
-                    "La contraseña es obligatoria.",
-                    ErrorType.Validation);
-            }
-
-            var nombre = admin.Admin_Nom_Ape.Trim();
-            var dni = admin.Admin_DNI.Trim();
-            var tipoDni = admin.Admin_Tipo_DNI.Trim();
-            var usuario = admin.Admin_Nom_Usuario.Trim();
-            var contraseña = admin.Admin_Contra;
-
-            if (dni.Any(c => c < '0' || c > '9'))
-                return Result<bool>.Fail(
-                    "El DNI solo puede contener números.", ErrorType.Validation);
-
-            if (nombre.Length > 100)
-            {
-                return Result<bool>.Fail(
-                    "El nombre y apellido no pueden superar los 100 caracteres.",
-                    ErrorType.Validation);
-            }
-
-            if (dni.Length > 8 || dni.Length < 8)
-            {
-                return Result<bool>.Fail(
-                    "El DNI no puede superar los 8 caracteres.",
-                    ErrorType.Validation);
-            }
-
-            if (tipoDni.Length > 40)
-            {
-                return Result<bool>.Fail(
-                    "El tipo de DNI no puede superar los 40 caracteres.",
-                    ErrorType.Validation);
-            }
-
-            if (usuario.Length > 30)
-            {
-                return Result<bool>.Fail(
-                    "El nombre de usuario no puede superar los 30 caracteres.",
-                    ErrorType.Validation);
-            }
-
-            if (contraseña.Length > 255)
-            {
-                return Result<bool>.Fail(
-                    "La contraseña no puede superar los 255 caracteres.",
-                    ErrorType.Validation);
-            }
+            var nombre = admin.Admin_Nom_Ape!.Trim();
+            var dni = admin.Admin_DNI!.Trim();
+            var tipoDni = admin.Admin_Tipo_DNI!.Trim();
+            var usuario = admin.Admin_Nom_Usuario!.Trim();
+            var contraseña = admin.Admin_Contra!;
 
             try
             {

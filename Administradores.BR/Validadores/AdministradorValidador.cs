@@ -14,26 +14,53 @@ namespace Administradores.BR.Validadores
             if (admin is null)
                 return "Los datos del administrador son obligatorios.";
 
-            if (string.IsNullOrWhiteSpace(admin.Admin_Nom_Ape))
-                return "El nombre y apellido no pueden estar vacíos.";
+            return ValidarDatos(
+                admin.Admin_Nom_Ape,
+                admin.Admin_DNI,
+                admin.Admin_Tipo_DNI,
+                admin.Admin_Nom_Usuario,
+                admin.Admin_Contra);
+        }
 
-            if (string.IsNullOrWhiteSpace(admin.Admin_DNI))
-                return "El DNI no puede estar vacío.";
+        public string? ValidarEditar(EditarAdminDto? admin)
+        {
+            if (admin is null)
+                return "Los datos del administrador son obligatorios.";
 
-            if (string.IsNullOrWhiteSpace(admin.Admin_Tipo_DNI))
-                return "El tipo de DNI no puede estar vacío.";
+            return ValidarDatos(
+                admin.Admin_Nom_Ape,
+                admin.Admin_DNI,
+                admin.Admin_Tipo_DNI,
+                admin.Admin_Nom_Usuario,
+                admin.Admin_Contra);
+        }
 
-            if (string.IsNullOrWhiteSpace(admin.Admin_Nom_Usuario))
-                return "El nombre de usuario no puede estar vacío.";
+        private string? ValidarDatos(
+            string? nombre,
+            string? dni,
+            string? tipoDni,
+            string? usuario,
+            string? contraseña)
+        {
+            if (string.IsNullOrWhiteSpace(nombre))
+                return "El nombre y apellido son obligatorios.";
 
-            if (string.IsNullOrWhiteSpace(admin.Admin_Contra))
-                return "La contraseña no puede estar vacía.";
+            if (string.IsNullOrWhiteSpace(dni))
+                return "El DNI es obligatorio.";
 
-            var nombre = admin.Admin_Nom_Ape.Trim();
-            var dni = admin.Admin_DNI.Trim();
-            var tipoDni = admin.Admin_Tipo_DNI.Trim();
-            var usuario = admin.Admin_Nom_Usuario.Trim();
-            var contraseña = admin.Admin_Contra;
+            if (string.IsNullOrWhiteSpace(tipoDni))
+                return "El tipo de DNI es obligatorio.";
+
+            if (string.IsNullOrWhiteSpace(usuario))
+                return "El nombre de usuario es obligatorio.";
+
+            if (string.IsNullOrWhiteSpace(contraseña))
+                return "La contraseña es obligatoria.";
+
+            nombre = nombre.Trim();
+            dni = dni.Trim();
+            tipoDni = tipoDni.Trim();
+            usuario = usuario.Trim();
 
             if (dni.Any(c => c < '0' || c > '9'))
                 return "El DNI solo puede contener números.";

@@ -9,5 +9,6 @@ namespace Administradores.BR.Interfaces.Validators
     public interface IAdministradorValidator
     {
         public string? ValidarCrear(CrearAdminDto? admin);
+        public string? ValidarEditar(EditarAdminDto? admin);
     }
 }
