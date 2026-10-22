@@ -196,8 +196,21 @@ botonExportar.addEventListener("click", async () => {
         botonExportar.disabled = true;
         botonExportar.textContent = "Generando Excel...";
 
+        // Obtener la fecha de exportación.
+        const fecha = new Date();
+
+        const dia = String(fecha.getDate()).padStart(2, "0");
+        const mes = String(fecha.getMonth() + 1).padStart(2, "0");
+        const anio = fecha.getFullYear();
+
+        const fechaExportacion = `${dia}-${mes}-${anio}`;
+        const nombreArchivo = `Inscripciones_${fechaExportacion}.xlsx`;
+
         const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet("Inscripciones");
+
+        const worksheet = workbook.addWorksheet(
+            `Inscripciones_${fechaExportacion}`
+        );
 
         worksheet.columns = [
             { header: "Marca temporal", key: "fechaInscripcion", width: 30 },
@@ -259,7 +272,7 @@ botonExportar.addEventListener("click", async () => {
         const link = document.createElement("a");
 
         link.href = url;
-        link.download = "Inscripciones.xlsx";
+        link.download = nombreArchivo;
 
         document.body.appendChild(link);
         link.click();
@@ -285,5 +298,4 @@ botonExportar.addEventListener("click", async () => {
             '<i class="bi bi-file-earmark-excel"></i> Exportar a Excel';
     }
 });
-
 cargarEstudiantes();
