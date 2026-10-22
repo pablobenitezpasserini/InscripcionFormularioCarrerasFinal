@@ -68,9 +68,9 @@ namespace Administradores.BR.Services
                 return Result<bool>.Fail(
                     "El nombre y apellido no pueden superar los 100 caracteres.", ErrorType.Validation);
 
-            if (dni.Length > 8)
+            if (dni.Length > 8 || dni.Length < 8)
                 return Result<bool>.Fail(
-                    "El DNI no puede superar los 8 caracteres.", ErrorType.Validation);
+                    "El DNI tiene que contener 8 caracteres.", ErrorType.Validation);
 
             if (tipoDni.Length > 40)
                 return Result<bool>.Fail(
@@ -204,7 +204,7 @@ namespace Administradores.BR.Services
                     ErrorType.Validation);
             }
 
-            if (dni.Length > 8)
+            if (dni.Length > 8 || dni.Length < 8)
             {
                 return Result<bool>.Fail(
                     "El DNI no puede superar los 8 caracteres.",
