@@ -242,14 +242,11 @@ namespace Administradores.BR.Services
                 var formularios = await _repository.ListarAsync();
                 var hoy = DateTime.Today;
 
-                var formulario = formularios.FirstOrDefault(f =>
-                    string.Equals(
-                        f.Hab_Form_Estado,
-                        "HABILITADO",
-                        StringComparison.OrdinalIgnoreCase)
-                    ||
-                    (f.Hab_Form_Fecha_Inicio.Date <= hoy &&
-                     f.Hab_Form_Fecha_Cierre.Date >= hoy));
+                var formulario = formularios.Where(f =>
+                    string.Equals(f.Hab_Form_Estado, "HABILITADO", StringComparison.OrdinalIgnoreCase) ||
+                    (f.Hab_Form_Fecha_Inicio.Date <= hoy && f.Hab_Form_Fecha_Cierre.Date >= hoy))
+                    .OrderByDescending(f => string.Equals(f.Hab_Form_Estado, "HABILITADO", StringComparison.OrdinalIgnoreCase))
+                    .FirstOrDefault();
 
                 if (formulario is null)
                 {
