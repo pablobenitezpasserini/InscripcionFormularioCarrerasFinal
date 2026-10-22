@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Administradores.BR.Interfaces.Repositories;
 using Administradores.BR.Interfaces.Services;
+using Administradores.BR.Interfaces.Validators;
 using Administradores.Models.Administradores.DTOs;
 using Administradores.Models.Administradores.Models;
 using Administradores.Models.Exceptions;
@@ -13,9 +14,11 @@ namespace Administradores.BR.Services
 {
     public class AdministradorService : IAdministradorService
     {
+        private readonly IAdministradorValidator _validador;
         private readonly IAdministradorRepository _adminRepository;
-        public AdministradorService(IAdministradorRepository administradorRepository)
+        public AdministradorService(IAdministradorValidator validador, IAdministradorRepository administradorRepository)
         {
+            this._validador = validador;
             this._adminRepository = administradorRepository;
         }
         public async Task<Result<IEnumerable<Administrador>>> ListarAsync()
@@ -36,53 +39,20 @@ namespace Administradores.BR.Services
 
         public async Task<Result<bool>> CrearAsync(CrearAdminDto admin)
         {
-            if (admin is null)
-                return Result<bool>.Fail("Los datos del administrador son obligatorios.", ErrorType.Validation);
+            var errorValidacion = _validador.ValidarCrear(admin);
 
-            if (string.IsNullOrWhiteSpace(admin.Admin_Nom_Ape))
-                return Result<bool>.Fail("El nombre y apellido no pueden estar vacíos.", ErrorType.Validation);
-
-            if (string.IsNullOrWhiteSpace(admin.Admin_DNI))
-                return Result<bool>.Fail("El DNI no puede estar vacío.", ErrorType.Validation);
-
-            if (string.IsNullOrWhiteSpace(admin.Admin_Tipo_DNI))
-                return Result<bool>.Fail("El tipo de DNI no puede estar vacío.", ErrorType.Validation);
-
-            if (string.IsNullOrWhiteSpace(admin.Admin_Nom_Usuario))
-                return Result<bool>.Fail("El nombre de usuario no puede estar vacío.", ErrorType.Validation);
-
-            if (string.IsNullOrWhiteSpace(admin.Admin_Contra))
-                return Result<bool>.Fail("La contraseña no puede estar vacía.", ErrorType.Validation);
-
-            var nombre = admin.Admin_Nom_Ape.Trim();
-            var dni = admin.Admin_DNI.Trim();
-            var tipoDni = admin.Admin_Tipo_DNI.Trim();
-            var usuario = admin.Admin_Nom_Usuario.Trim();
-            var contraseña = admin.Admin_Contra;
-
-            if (dni.Any(c => c < '0' || c > '9'))
+            if (errorValidacion is not null)
+            {
                 return Result<bool>.Fail(
-                    "El DNI solo puede contener números.", ErrorType.Validation);
+                    errorValidacion,
+                    ErrorType.Validation);
+            }
 
-            if (nombre.Length > 100)
-                return Result<bool>.Fail(
-                    "El nombre y apellido no pueden superar los 100 caracteres.", ErrorType.Validation);
-
-            if (dni.Length > 8 || dni.Length < 8)
-                return Result<bool>.Fail(
-                    "El DNI tiene que contener 8 caracteres.", ErrorType.Validation);
-
-            if (tipoDni.Length > 40)
-                return Result<bool>.Fail(
-                    "El tipo de DNI no puede superar los 40 caracteres.", ErrorType.Validation);
-
-            if (usuario.Length > 30)
-                return Result<bool>.Fail(
-                    "El nombre de usuario no puede superar los 30 caracteres.", ErrorType.Validation);
-
-            if (contraseña.Length > 255)
-                return Result<bool>.Fail(
-                    "La contraseña no puede superar los 255 caracteres.", ErrorType.Validation);
+            var nombre = admin.Admin_Nom_Ape!.Trim();
+            var dni = admin.Admin_DNI!.Trim();
+            var tipoDni = admin.Admin_Tipo_DNI!.Trim();
+            var usuario = admin.Admin_Nom_Usuario!.Trim();
+            var contraseña = admin.Admin_Contra!;
 
             // Reserva del admin
             if (string.Equals(usuario, "admin",
@@ -92,27 +62,22 @@ namespace Administradores.BR.Services
                     "El nombre de usuario \"admin\" está reservado para el super administrador.", ErrorType.Conflict);
             }
 
-            if (dni == "00000000" &&
-                string.Equals(tipoDni, "DNI",
-                    StringComparison.OrdinalIgnoreCase))
+            if (dni == "00000000" && string.Equals(tipoDni, "DNI", StringComparison.OrdinalIgnoreCase))
             {
-                return Result<bool>.Fail(
-                    "El DNI 00000000 está reservado para el super administrador.", ErrorType.Conflict);
+                return Result<bool>.Fail("El DNI 00000000 está reservado para el super administrador.", ErrorType.Conflict);
             }
 
             try
             {
                 if (await _adminRepository.ExisteDniAsync(dni, tipoDni))
                 {
-                    return Result<bool>.Fail(
-                        "Ya existe un administrador con ese DNI y tipo de DNI.", ErrorType.Conflict);
+                    return Result<bool>.Fail("Ya existe un administrador con ese DNI y tipo de DNI.", ErrorType.Conflict);
                 }
 
-                // 6. Validar nombre de usuario único
+                //Validar nombre de usuario único
                 if (await _adminRepository.ExisteUsuarioAsync(usuario))
                 {
-                    return Result<bool>.Fail(
-                        "El nombre de usuario ingresado ya existe.", ErrorType.Conflict);
+                    return Result<bool>.Fail("El nombre de usuario ingresado ya existe.", ErrorType.Conflict);
                 }
 
                 var nuevoAdmin = new Administrador

@@ -1,6 +1,8 @@
 using Administradores.BR.Interfaces.Repositories;
 using Administradores.BR.Interfaces.Services;
+using Administradores.BR.Interfaces.Validators;
 using Administradores.BR.Services;
+using Administradores.BR.Validadores;
 using Administradores.DA.Repositories;
 using Administradores.Models.Administradores.DTOs;
 using Administradores.Models.Administradores.Models;
@@ -27,6 +29,8 @@ builder.Services.AddSingleton<IAdministradorRepository>(
     _ => new AdministradorRepository(connectionString));
 
 builder.Services.AddSingleton<IAdministradorService, AdministradorService>();
+
+builder.Services.AddSingleton<IAdministradorValidator, AdministradorValidador>();
 
 builder.Services.AddSingleton<IHabilitacionFormularioRepository>(
     _ => new HabilitacionFormularioRepository(connectionString));
