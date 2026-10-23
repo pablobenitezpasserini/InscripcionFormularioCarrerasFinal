@@ -104,9 +104,8 @@ async function cargarFormularios() {
 
         mensaje.textContent =
             error.response?.data?.detail ??
-            error.message ??
             "No se pudo cargar el listado de formularios.";
-    }
+    } 
 }
 
 function formatearFecha(fecha) {
