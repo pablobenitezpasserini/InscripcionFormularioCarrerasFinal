@@ -146,8 +146,7 @@ public sealed class AdministradorServiceTest
     [DataRow("ADMIN")]
     [DataRow("Admin")]
     [DataRow("AdMiN")]
-    public async Task CrearAsync_CuandoUsuarioEstaReservado_RetornaConflict(
-    string usuario)
+    public async Task CrearAsync_CuandoUsuarioEstaReservado_RetornaConflict(string usuario)
     {
         // Arrange
         CrearAdminDto adminDto = CrearAdminDatosCorrectos();
