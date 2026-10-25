@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Administradores.BR.Interfaces.Repositories;
 using Administradores.BR.Interfaces.Services;
+using Administradores.BR.Interfaces.Validators;
 using Administradores.Models.Exceptions;
 using Administradores.Models.Formularios.DTOs;
 using Administradores.Models.Formularios.Models;
@@ -18,16 +19,22 @@ namespace Administradores.BR.Services
     public class HabilitacionFormularioService : IHabilitacionFormularioService
     {
         private readonly IHabilitacionFormularioRepository _repository;
+        private readonly IHabilitacionFormularioValidator _validador;
 
         /// <summary>
-        /// Inicializa una nueva instancia de <see cref="HabilitacionFormularioService"/>.
+        /// Inicializa una nueva instancia de
+        /// <see cref="HabilitacionFormularioService"/>.
         /// </summary>
         /// <param name="repository">
-        /// Repositorio encargado de acceder y gestionar los formularios.
+        /// Repositorio encargado de gestionar los formularios.
         /// </param>
-        public HabilitacionFormularioService(IHabilitacionFormularioRepository repository)
+        /// <param name="validador">
+        /// Validador encargado de comprobar los datos de los formularios.
+        /// </param>
+        public HabilitacionFormularioService(IHabilitacionFormularioRepository repository, IHabilitacionFormularioValidator validador)
         {
             _repository = repository;
+            _validador = validador;
         }
 
         /// <inheritdoc />
@@ -50,38 +57,12 @@ namespace Administradores.BR.Services
         /// <inheritdoc />
         public async Task<Result<bool>> CrearAsync(CrearHabilitacionFormularioDto data)
         {
-            if (data is null)
-            {
-                return Result<bool>.Fail(
-                    "Los datos del formulario son obligatorios.",
-                    ErrorType.Validation);
-            }
+            var errorValidacion = _validador.ValidarCrear(data);
 
-            if (data.Hab_Form_Año <= 0)
+            if (errorValidacion is not null)
             {
                 return Result<bool>.Fail(
-                    "El año del formulario no es válido.",
-                    ErrorType.Validation);
-            }
-
-            if (data.Hab_Form_Fecha_Inicio == default)
-            {
-                return Result<bool>.Fail(
-                    "La fecha de inicio es obligatoria.",
-                    ErrorType.Validation);
-            }
-
-            if (data.Hab_Form_Fecha_Cierre == default)
-            {
-                return Result<bool>.Fail(
-                    "La fecha de cierre es obligatoria.",
-                    ErrorType.Validation);
-            }
-
-            if (data.Hab_Form_Fecha_Inicio >= data.Hab_Form_Fecha_Cierre)
-            {
-                return Result<bool>.Fail(
-                    "La fecha de inicio debe ser anterior a la fecha de cierre.",
+                    errorValidacion,
                     ErrorType.Validation);
             }
 
@@ -133,43 +114,16 @@ namespace Administradores.BR.Services
                     ErrorType.Validation);
             }
 
-            if (data is null)
-            {
-                return Result<bool>.Fail(
-                    "Los datos del formulario son obligatorios.",
-                    ErrorType.Validation);
-            }
+            var errorValidacion = _validador.ValidarEditar(data);
 
-            if (data.Hab_Form_Fecha_Inicio == default ||
-                data.Hab_Form_Fecha_Cierre == default)
+            if (errorValidacion is not null)
             {
                 return Result<bool>.Fail(
-                    "Las fechas de inicio y cierre son obligatorias.",
-                    ErrorType.Validation);
-            }
-
-            if (data.Hab_Form_Fecha_Inicio >= data.Hab_Form_Fecha_Cierre)
-            {
-                return Result<bool>.Fail(
-                    "La fecha de inicio debe ser anterior a la fecha de cierre.",
-                    ErrorType.Validation);
-            }
-
-            if (string.IsNullOrWhiteSpace(data.Hab_Form_Estado))
-            {
-                return Result<bool>.Fail(
-                    "El estado del formulario es obligatorio.",
+                    errorValidacion,
                     ErrorType.Validation);
             }
 
             var estado = data.Hab_Form_Estado.Trim().ToUpperInvariant();
-
-            if (estado != "HABILITADO" && estado != "DESHABILITADO")
-            {
-                return Result<bool>.Fail(
-                    "El estado debe ser HABILITADO o DESHABILITADO.",
-                    ErrorType.Validation);
-            }
 
             try
             {

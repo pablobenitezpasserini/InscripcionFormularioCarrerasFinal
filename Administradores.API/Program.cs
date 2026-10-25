@@ -12,6 +12,7 @@ using Administradores.Models.Results;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddProblemDetails();
 // Generación del documento OpenAPI
 builder.Services.AddOpenApi(options =>
 {
@@ -31,6 +32,10 @@ builder.Services.AddSingleton<IAdministradorRepository>(
 builder.Services.AddSingleton<IAdministradorService, AdministradorService>();
 
 builder.Services.AddSingleton<IAdministradorValidator, AdministradorValidador>();
+
+builder.Services.AddSingleton<
+    IHabilitacionFormularioValidator,
+    HabilitacionFormularioValidador>();
 
 builder.Services.AddSingleton<IHabilitacionFormularioRepository>(
     _ => new HabilitacionFormularioRepository(connectionString));
@@ -52,6 +57,39 @@ builder.Services.AddCors(options =>
 
 
 var app = builder.Build();
+
+// tuve que poner esto porque si hay un error de deseralizacion la excepcion no es controlada
+app.UseExceptionHandler(exceptionHandlerApp =>
+{
+    exceptionHandlerApp.Run(async context =>
+    {
+        var exception = context.Features
+            .Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>()
+            ?.Error;
+
+        if (exception is Microsoft.AspNetCore.Http.BadHttpRequestException)
+        {
+            context.Response.StatusCode =
+                StatusCodes.Status400BadRequest;
+
+            await Results.Problem(
+                statusCode: StatusCodes.Status400BadRequest,
+                title: "Solicitud inválida",
+                detail: "El cuerpo de la solicitud contiene datos inválidos o incompatibles con los tipos esperados."
+            ).ExecuteAsync(context);
+
+            return;
+        }
+
+        await Results.Problem(
+            statusCode: StatusCodes.Status500InternalServerError,
+            title: "Error interno del servidor",
+            detail: "Ocurrió un error inesperado al procesar la solicitud."
+        ).ExecuteAsync(context);
+    });
+});
+
+app.UseStatusCodePages();
 
 app.UseCors("FrontendPolicy");
 
