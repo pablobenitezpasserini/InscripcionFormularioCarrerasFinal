@@ -12,15 +12,27 @@ using Microsoft.Data.SqlClient;
 
 namespace Administradores.DA.Repositories
 {
+    /// <summary>
+    /// Implementa las operaciones de acceso a datos de los administradores
+    /// y la consulta de estudiantes para exportación mediante procedimientos almacenados.
+    /// </summary>
     public class AdministradorRepository : IAdministradorRepository
     {
         private readonly string _connectionString;
 
+        /// <summary>
+        /// Inicializa una nueva instancia de <see cref="AdministradorRepository"/>
+        /// con la cadena de conexión a la base de datos.
+        /// </summary>
+        /// <param name="connectionString">
+        /// Cadena de conexión utilizada para establecer conexiones con la base de datos.
+        /// </param>
         public AdministradorRepository(string connectionString)
         {
             _connectionString = connectionString;
         }
 
+        /// <inheritdoc />
         public async Task CrearAsync(Administrador admin)
         {
             try
@@ -48,6 +60,7 @@ namespace Administradores.DA.Repositories
             }
         }
 
+        /// <inheritdoc />
         public async Task EditarAsync(Administrador admin)
         {
             try
@@ -76,6 +89,7 @@ namespace Administradores.DA.Repositories
             }
         }
 
+        /// <inheritdoc />
         public async Task EliminarAsync(int id)
         {
             try
@@ -99,6 +113,7 @@ namespace Administradores.DA.Repositories
             }
         }
 
+        /// <inheritdoc />
         public async Task<bool> EsSuperAdminAsync(int id)
         {
             try
@@ -122,6 +137,7 @@ namespace Administradores.DA.Repositories
             }
         }
 
+        /// <inheritdoc />
         public async Task<bool> ExisteDniAsync(string dni, string tipoDni)
         {
             try
@@ -145,6 +161,8 @@ namespace Administradores.DA.Repositories
                     ex);
             }
         }
+
+        /// <inheritdoc />
         public async Task<bool> ExisteDniAsync(string dni, string tipoDni, int idExcluir)
         {
             try
@@ -170,6 +188,7 @@ namespace Administradores.DA.Repositories
             }
         }
 
+        /// <inheritdoc />
         public async Task<bool> ExistePorIdAsync(int id)
         {
             try
@@ -193,6 +212,7 @@ namespace Administradores.DA.Repositories
             }
         }
 
+        /// <inheritdoc />
         public async Task<bool> ExisteUsuarioAsync(string nombreUsuario)
         {
             try
@@ -216,6 +236,7 @@ namespace Administradores.DA.Repositories
             }
         }
 
+        /// <inheritdoc />
         public async Task<bool> ExisteUsuarioAsync(string nombreUsuario, int idExcluir)
         {
             try
@@ -240,6 +261,7 @@ namespace Administradores.DA.Repositories
             }
         }
 
+        /// <inheritdoc />
         public async Task<IEnumerable<Administrador>> ListarAsync()
         {
             try
@@ -260,6 +282,7 @@ namespace Administradores.DA.Repositories
             }
         }
 
+        /// <inheritdoc />
         public async Task<string> LoguearAsync(string usuario, string contrasena)
         {
             try
@@ -291,6 +314,7 @@ namespace Administradores.DA.Repositories
             }
         }
 
+        /// <inheritdoc />
         public async Task<IEnumerable<EstudianteExportacionDto>> ListarEstudiantesCarrerasInfoAcaAsync()
         {
             try

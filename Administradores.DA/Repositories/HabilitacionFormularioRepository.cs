@@ -11,15 +11,27 @@ using Microsoft.Data.SqlClient;
 
 namespace Administradores.DA.Repositories
 {
+    /// <summary>
+    /// Implementa las operaciones de acceso a datos para gestionar los formularios
+    /// de habilitación mediante procedimientos almacenados.
+    /// </summary>
     public class HabilitacionFormularioRepository : IHabilitacionFormularioRepository
     {
         private readonly string _connectionString;
 
+        /// <summary>
+        /// Inicializa una nueva instancia de <see cref="HabilitacionFormularioRepository"/>
+        /// con la cadena de conexión a la base de datos.
+        /// </summary>
+        /// <param name="connectionString">
+        /// Cadena de conexión utilizada para establecer conexiones con la base de datos.
+        /// </param>
         public HabilitacionFormularioRepository(string connectionString)
         {
             _connectionString = connectionString;
         }
 
+        /// <inheritdoc />
         public async Task<IEnumerable<HabilitacionFormulario>> ListarAsync()
         {
             try
@@ -38,6 +50,7 @@ namespace Administradores.DA.Repositories
             }
         }
 
+        /// <inheritdoc />
         public async Task CrearAsync(HabilitacionFormulario formulario)
         {
             try
@@ -67,6 +80,7 @@ namespace Administradores.DA.Repositories
             }
         }
 
+        /// <inheritdoc />
         public async Task EditarAsync(HabilitacionFormulario formulario)
         {
             try
@@ -99,6 +113,7 @@ namespace Administradores.DA.Repositories
             }
         }
 
+        /// <inheritdoc />
         public async Task EliminarAsync(int id)
         {
             try

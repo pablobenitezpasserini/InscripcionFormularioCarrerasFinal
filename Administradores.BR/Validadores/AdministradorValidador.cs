@@ -7,8 +7,13 @@ using Administradores.Models.Administradores.DTOs;
 
 namespace Administradores.BR.Validadores
 {
+    /// <summary>
+    /// Implementa las validaciones de los datos de los administradores,
+    /// incluyendo campos obligatorios, longitudes máximas y formato del DNI.
+    /// </summary>
     public class AdministradorValidador : IAdministradorValidator
     {
+        /// <inheritdoc />
         public string? ValidarCrear(CrearAdminDto? admin)
         {
             if (admin is null)
@@ -21,7 +26,7 @@ namespace Administradores.BR.Validadores
                 admin.Admin_Nom_Usuario,
                 admin.Admin_Contra);
         }
-
+        /// <inheritdoc />
         public string? ValidarEditar(EditarAdminDto? admin)
         {
             if (admin is null)

@@ -11,15 +11,26 @@ using Administradores.Models.Results;
 
 namespace Administradores.BR.Services
 {
+    /// <summary>
+    /// Implementa la lógica de negocio para gestionar los formularios,
+    /// validar sus datos y consultar su disponibilidad.
+    /// </summary>
     public class HabilitacionFormularioService : IHabilitacionFormularioService
     {
         private readonly IHabilitacionFormularioRepository _repository;
 
+        /// <summary>
+        /// Inicializa una nueva instancia de <see cref="HabilitacionFormularioService"/>.
+        /// </summary>
+        /// <param name="repository">
+        /// Repositorio encargado de acceder y gestionar los formularios.
+        /// </param>
         public HabilitacionFormularioService(IHabilitacionFormularioRepository repository)
         {
             _repository = repository;
         }
 
+        /// <inheritdoc />
         public async Task<Result<IEnumerable<HabilitacionFormulario>>> GetAllAsync()
         {
             try
@@ -36,6 +47,7 @@ namespace Administradores.BR.Services
             }
         }
 
+        /// <inheritdoc />
         public async Task<Result<bool>> CrearAsync(CrearHabilitacionFormularioDto data)
         {
             if (data is null)
@@ -111,6 +123,7 @@ namespace Administradores.BR.Services
             }
         }
 
+        /// <inheritdoc />
         public async Task<Result<bool>> EditarAsync(int id, EditarHabilitacionFormularioDto data)
         {
             if (id <= 0)
@@ -203,6 +216,7 @@ namespace Administradores.BR.Services
             }
         }
 
+        /// <inheritdoc />
         public async Task<Result<bool>> EliminarAsync(int id)
         {
             if (id <= 0)
@@ -235,6 +249,7 @@ namespace Administradores.BR.Services
             }
         }
 
+        /// <inheritdoc />
         public async Task<Result<HabilitacionFormulario>> EstaDisponibleAsync()
         {
             try
