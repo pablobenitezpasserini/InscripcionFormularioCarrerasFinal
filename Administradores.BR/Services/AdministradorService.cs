@@ -12,15 +12,30 @@ using Administradores.Models.Results;
 
 namespace Administradores.BR.Services
 {
+    /// <summary>
+    /// Implementa la lógica de negocio para gestionar administradores,
+    /// autenticar usuarios y obtener datos de estudiantes para su exportación.
+    /// </summary>
     public class AdministradorService : IAdministradorService
     {
         private readonly IAdministradorValidator _validador;
         private readonly IAdministradorRepository _adminRepository;
+
+        /// <summary>
+        /// Inicializa una nueva instancia de <see cref="AdministradorService"/>.
+        /// </summary>
+        /// <param name="validador">
+        /// Validador encargado de comprobar los datos de los administradores.
+        /// </param>
+        /// <param name="administradorRepository">
+        /// Repositorio encargado de acceder y gestionar los datos de los administradores.
+        /// </param>
         public AdministradorService(IAdministradorValidator validador, IAdministradorRepository administradorRepository)
         {
             this._validador = validador;
             this._adminRepository = administradorRepository;
         }
+        /// <inheritdoc />
         public async Task<Result<IEnumerable<Administrador>>> ListarAsync()
         {
             try
@@ -36,7 +51,7 @@ namespace Administradores.BR.Services
                     ErrorType.Unexpected);
             }
         }
-
+        /// <inheritdoc />
         public async Task<Result<bool>> CrearAsync(CrearAdminDto admin)
         {
             var errorValidacion = _validador.ValidarCrear(admin);
@@ -99,7 +114,7 @@ namespace Administradores.BR.Services
                     "No se pudo crear el administrador por un error de base de datos.", ErrorType.Unexpected);
             }
         }
-
+        /// <inheritdoc />
         public async Task<Result<bool>> EditarAsync(int id, EditarAdminDto admin)
         {
             if (id <= 0)
@@ -208,7 +223,7 @@ namespace Administradores.BR.Services
                     ErrorType.Unexpected);
             }
         }
-
+        /// <inheritdoc />
         public async Task<Result<bool>> EliminarAsync(int id)
         {
             if (id <= 0)
@@ -245,7 +260,7 @@ namespace Administradores.BR.Services
                     ErrorType.Unexpected);
             }
         }
-
+        /// <inheritdoc />
         public async Task<Result<string>> LoguearAsync(string usuario, string contrasena)
         {
             if (string.IsNullOrWhiteSpace(usuario))
@@ -280,7 +295,7 @@ namespace Administradores.BR.Services
                 return Result<string>.Fail("No se pudo verificar el acceso por un error de persistencia.", ErrorType.Unexpected);
             }
         }
-
+        /// <inheritdoc />
         public async Task<Result<IEnumerable<EstudianteExportacionDto>>> ExportarEstudiantesExcelAsync()
         {
             try
