@@ -1346,4 +1346,148 @@ public sealed class AdministradorServiceTest
             Times.Once);
     }
     #endregion
+    #region Test de login
+    [TestMethod]
+    public async Task LoguearAsync_UsuarioVacio_RetornaErrorDeValidacion()
+    {
+        // Arrange
+        var usuario = " ";
+        var contrasena = "Clave123";
+
+        // Act
+        var resultado = await _service.LoguearAsync(usuario, contrasena);
+
+        // Assert
+        Assert.IsFalse(resultado.Success);
+        Assert.AreEqual(
+            "El nombre de usuario es obligatorio.",
+            resultado.Error);
+        Assert.AreEqual(ErrorType.Validation, resultado.ErrorType);
+
+        _adminRepositoryMock.Verify(
+            r => r.LoguearAsync(
+                It.IsAny<string>(),
+                It.IsAny<string>()),
+            Times.Never);
+    }
+
+    [TestMethod]
+    public async Task LoguearAsync_ContrasenaVacia_RetornaErrorDeValidacion()
+    {
+        // Arrange
+        var usuario = "juanperez";
+        var contrasena = "";
+
+        // Act
+        var resultado = await _service.LoguearAsync(usuario, contrasena);
+
+        // Assert
+        Assert.IsFalse(resultado.Success);
+        Assert.AreEqual(
+            "La contraseña es obligatoria.",
+            resultado.Error);
+        Assert.AreEqual(ErrorType.Validation, resultado.ErrorType);
+
+        _adminRepositoryMock.Verify(
+            r => r.LoguearAsync(
+                It.IsAny<string>(),
+                It.IsAny<string>()),
+            Times.Never);
+    }
+
+    [TestMethod]
+    public async Task LoguearAsync_CredencialesCorrectas_RetornaResultadoExitoso()
+    {
+        // Arrange
+        var usuario = "juanperez";
+        var contrasena = "Clave123";
+        var mensaje = "Logueo exitoso";
+
+        _adminRepositoryMock
+            .Setup(r => r.LoguearAsync(usuario, contrasena))
+            .ReturnsAsync(mensaje);
+
+        // Act
+        var resultado = await _service.LoguearAsync(usuario, contrasena);
+
+        // Assert
+        Assert.IsTrue(resultado.Success);
+        Assert.AreEqual(mensaje, resultado.Data);
+        Assert.IsNull(resultado.Error);
+        Assert.AreEqual(ErrorType.None, resultado.ErrorType);
+
+        _adminRepositoryMock.Verify(
+            r => r.LoguearAsync(usuario, contrasena),
+            Times.Once);
+    }
+
+    [TestMethod]
+    public async Task LoguearAsync_CredencialesIncorrectas_RetornaErrorNoAutorizado()
+    {
+        // Arrange
+        var usuario = "juanperez";
+        var contrasena = "Incorrecta";
+        var mensaje = "Usuario o contraseña inválidos";
+
+        _adminRepositoryMock
+            .Setup(r => r.LoguearAsync(usuario, contrasena))
+            .ReturnsAsync(mensaje);
+
+        // Act
+        var resultado = await _service.LoguearAsync(usuario, contrasena);
+
+        // Assert
+        Assert.IsFalse(resultado.Success);
+        Assert.AreEqual(
+            "Nombre de usuario o contraseña incorrectos.",
+            resultado.Error);
+        Assert.AreEqual(ErrorType.Unauthorized, resultado.ErrorType);
+    }
+
+    [TestMethod]
+    public async Task LoguearAsync_ErrorDePersistencia_RetornaErrorInesperado()
+    {
+        // Arrange
+        var usuario = "juanperez";
+        var contrasena = "Clave123";
+
+        _adminRepositoryMock
+            .Setup(r => r.LoguearAsync(usuario, contrasena))
+            .ThrowsAsync(new DataAccessException("Error de persistencia", new Exception()));
+
+        // Act
+        var resultado = await _service.LoguearAsync(usuario, contrasena);
+
+        // Assert
+        Assert.IsFalse(resultado.Success);
+        Assert.AreEqual(
+            "No se pudo verificar el acceso por un error de persistencia.",
+            resultado.Error);
+        Assert.AreEqual(ErrorType.Unexpected, resultado.ErrorType);
+    }
+
+    [TestMethod]
+    public async Task LoguearAsync_UsuarioConEspacios_EnviaUsuarioRecortadoAlRepositorio()
+    {
+        // Arrange
+        var usuario = "  juanperez  ";
+        var contrasena = "Clave123";
+        var usuarioEsperado = "juanperez";
+        var mensaje = "Logueo exitoso";
+
+        _adminRepositoryMock
+            .Setup(r => r.LoguearAsync(usuarioEsperado, contrasena))
+            .ReturnsAsync(mensaje);
+
+        // Act
+        var resultado = await _service.LoguearAsync(usuario, contrasena);
+
+        // Assert
+        Assert.IsTrue(resultado.Success);
+
+        _adminRepositoryMock.Verify(
+            r => r.LoguearAsync(usuarioEsperado, contrasena),
+            Times.Once);
+    }
+    #endregion
 }
