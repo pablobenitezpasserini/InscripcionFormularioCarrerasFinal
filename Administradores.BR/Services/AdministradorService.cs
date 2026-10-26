@@ -150,40 +150,17 @@ namespace Administradores.BR.Services
 
                 var esSuperAdmin = await _adminRepository.EsSuperAdminAsync(id);
 
-                if (!esSuperAdmin)
-                {
-                    if (string.Equals(
-                        usuario,
-                        "admin",
-                        StringComparison.OrdinalIgnoreCase))
-                    {
-                        return Result<bool>.Fail(
-                            "El nombre de usuario admin está reservado.",
-                            ErrorType.Conflict);
-                    }
+                var errorRestricciones = ValidarRestriccionesDeAdministrador(
+                    esSuperAdmin,
+                    dni,
+                    tipoDni,
+                    usuario);
 
-                    if (dni == "00000000" &&
-                        string.Equals(
-                            tipoDni,
-                            "DNI",
-                            StringComparison.OrdinalIgnoreCase))
-                    {
-                        return Result<bool>.Fail(
-                            "El DNI 00000000 está reservado.",
-                            ErrorType.Conflict);
-                    }
-                }
-                else
+                if (errorRestricciones is not null)
                 {
-                    if (dni != "00000000" || !string.Equals(tipoDni, "DNI", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return Result<bool>.Fail("No se puede modificar el DNI ni el tipo de DNI del super administrador.", ErrorType.Conflict);
-                    }
-
-                    if (!string.Equals(usuario, "admin", StringComparison.OrdinalIgnoreCase))
-                    {
-                        return Result<bool>.Fail("No se puede modificar el nombre de usuario del super administrador.", ErrorType.Conflict);
-                    }
+                    return Result<bool>.Fail(
+                        errorRestricciones,
+                        ErrorType.Conflict);
                 }
 
                 if (await _adminRepository.ExisteDniAsync(
@@ -316,6 +293,50 @@ namespace Administradores.BR.Services
                     ErrorType.Unexpected
                 );
             }
+        }
+
+        private static string? ValidarRestriccionesDeAdministrador(bool esSuperAdmin, string dni, string tipoDni, string usuario)
+        {
+            if (!esSuperAdmin)
+            {
+                if (string.Equals(
+                    usuario,
+                    "admin",
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    return "El nombre de usuario admin está reservado.";
+                }
+
+                if (dni == "00000000" &&
+                    string.Equals(
+                        tipoDni,
+                        "DNI",
+                        StringComparison.OrdinalIgnoreCase))
+                {
+                    return "El DNI 00000000 está reservado.";
+                }
+
+                return null;
+            }
+
+            if (dni != "00000000" ||
+                !string.Equals(
+                    tipoDni,
+                    "DNI",
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                return "No se puede modificar el DNI ni el tipo de DNI del super administrador.";
+            }
+
+            if (!string.Equals(
+                usuario,
+                "admin",
+                StringComparison.OrdinalIgnoreCase))
+            {
+                return "No se puede modificar el nombre de usuario del super administrador.";
+            }
+
+            return null;
         }
     }
 }
