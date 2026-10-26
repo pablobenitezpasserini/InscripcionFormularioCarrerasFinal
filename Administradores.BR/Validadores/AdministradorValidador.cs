@@ -40,12 +40,36 @@ namespace Administradores.BR.Validadores
                 admin.Admin_Contra);
         }
 
-        private string? ValidarDatos(
-            string? nombre,
-            string? dni,
-            string? tipoDni,
-            string? usuario,
-            string? contraseña)
+        private static string? ValidarDatos(string? nombre, string? dni, string? tipoDni, string? usuario, string? contraseña)
+        {
+            var errorObligatorios = ValidarCamposObligatorios(
+                nombre,
+                dni,
+                tipoDni,
+                usuario,
+                contraseña);
+
+            if (errorObligatorios is not null)
+                return errorObligatorios;
+
+            nombre = nombre!.Trim();
+            dni = dni!.Trim();
+            tipoDni = tipoDni!.Trim();
+            usuario = usuario!.Trim();
+
+            var errorDni = ValidarFormatoDni(dni);
+
+            if (errorDni is not null)
+                return errorDni;
+
+            return ValidarLongitudes(
+                nombre,
+                tipoDni,
+                usuario,
+                contraseña!);
+        }
+
+        private static string? ValidarCamposObligatorios(string? nombre, string? dni, string? tipoDni, string? usuario, string? contraseña)
         {
             if (string.IsNullOrWhiteSpace(nombre))
                 return "El nombre y apellido son obligatorios.";
@@ -62,19 +86,22 @@ namespace Administradores.BR.Validadores
             if (string.IsNullOrWhiteSpace(contraseña))
                 return "La contraseña es obligatoria.";
 
-            nombre = nombre.Trim();
-            dni = dni.Trim();
-            tipoDni = tipoDni.Trim();
-            usuario = usuario.Trim();
-
+            return null;
+        }
+        private static string? ValidarFormatoDni(string dni)
+        {
             if (dni.Any(c => c < '0' || c > '9'))
                 return "El DNI solo puede contener números.";
 
-            if (nombre.Length > 100)
-                return "El nombre y apellido no pueden superar los 100 caracteres.";
-
             if (dni.Length != 8)
                 return "El DNI tiene que contener 8 caracteres.";
+
+            return null;
+        }
+        private static string? ValidarLongitudes(string nombre, string tipoDni, string usuario, string contraseña)
+        {
+            if (nombre.Length > 100)
+                return "El nombre y apellido no pueden superar los 100 caracteres.";
 
             if (tipoDni.Length > 40)
                 return "El tipo de DNI no puede superar los 40 caracteres.";
