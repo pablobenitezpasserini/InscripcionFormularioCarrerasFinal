@@ -8,17 +8,26 @@
 *.userosscache
 *.sln.docstates
 
+# Resultados de pruebas
 **/TestResults/
 *.trx
+
+# Cobertura de código
 **/coverage/
 coverage/
 coverage.*
 *.coverage
 *.coveragexml
+**/coverage.cobertura.xml
+**/coverage.json
+**/coveragereport/
+**/CoverageReport/
 
+# Publicación y artefactos
 **/publish/
 artifacts/
 
+# Variables de entorno y secretos
 .env
 .env.*
 !.env.example
@@ -27,16 +36,19 @@ artifacts/
 *.p12
 *.key
 
+# Configuración local
 appsettings.Local.json
 appsettings.*.Local.json
 
 *.PublishSettings
 
+# Frontend y dependencias
 **/node_modules/
 **/dist/
 **/build/
 **/.vite/
 
+# Archivos del sistema operativo
 .DS_Store
 Thumbs.db
 Desktop.ini
