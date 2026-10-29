@@ -95,8 +95,8 @@ app.UseStatusCodePages();
 app.UseCors("FrontendPolicy");
 
 // OpenAPI y Swagger UI solo en desarrollo
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.MapOpenApi();
 
     app.UseSwaggerUI(options =>
@@ -105,7 +105,7 @@ if (app.Environment.IsDevelopment())
             "/openapi/v1.json",
             "Administradores API v1");
     });
-}
+//}
 
 app.UseHttpsRedirection();
 
