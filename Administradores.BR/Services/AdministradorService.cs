@@ -67,7 +67,7 @@ namespace Administradores.BR.Services
             var dni = admin.Admin_DNI!.Trim();
             var tipoDni = admin.Admin_Tipo_DNI!.Trim();
             var usuario = admin.Admin_Nom_Usuario!.Trim();
-            var contraseña = admin.Admin_Contra!;
+            var contraseña = admin.Admin_Contra!.Trim();
 
             // Reserva del admin
             if (string.Equals(usuario, "admin",
@@ -137,7 +137,7 @@ namespace Administradores.BR.Services
             var dni = admin.Admin_DNI!.Trim();
             var tipoDni = admin.Admin_Tipo_DNI!.Trim();
             var usuario = admin.Admin_Nom_Usuario!.Trim();
-            var contraseña = admin.Admin_Contra!;
+            var contraseña = admin.Admin_Contra!.Trim();
 
             try
             {
