@@ -25,19 +25,13 @@ namespace Administradores.BR.Validadores
                 return "El año del formulario no es válido.";
             }
 
-            if (data.Hab_Form_Fecha_Inicio == default)
-            {
-                return "La fecha de inicio es obligatoria.";
-            }
+            var errorFechas = ValidarFechas(
+                data.Hab_Form_Fecha_Inicio,
+                data.Hab_Form_Fecha_Cierre);
 
-            if (data.Hab_Form_Fecha_Cierre == default)
+            if (errorFechas is not null)
             {
-                return "La fecha de cierre es obligatoria.";
-            }
-
-            if (data.Hab_Form_Fecha_Inicio >= data.Hab_Form_Fecha_Cierre)
-            {
-                return "La fecha de inicio debe ser anterior a la fecha de cierre.";
+                return errorFechas;
             }
 
             return null;
@@ -51,23 +45,53 @@ namespace Administradores.BR.Validadores
                 return "Los datos del formulario son obligatorios.";
             }
 
-            if (data.Hab_Form_Fecha_Inicio == default ||
-                data.Hab_Form_Fecha_Cierre == default)
+            var errorFechas = ValidarFechas(
+                data.Hab_Form_Fecha_Inicio,
+                data.Hab_Form_Fecha_Cierre);
+
+            if (errorFechas is not null)
             {
-                return "Las fechas de inicio y cierre son obligatorias.";
+                return errorFechas;
             }
 
-            if (data.Hab_Form_Fecha_Inicio >= data.Hab_Form_Fecha_Cierre)
+            var errorEstado = ValidarEstado(data.Hab_Form_Estado);
+
+            if (errorEstado is not null)
+            {
+                return errorEstado;
+            }
+
+            return null;
+        }
+
+        private static string? ValidarFechas(DateTime fechaInicio, DateTime fechaCierre)
+        {
+            if (fechaInicio == default)
+            {
+                return "La fecha de inicio es obligatoria.";
+            }
+
+            if (fechaCierre == default)
+            {
+                return "La fecha de cierre es obligatoria.";
+            }
+
+            if (fechaInicio >= fechaCierre)
             {
                 return "La fecha de inicio debe ser anterior a la fecha de cierre.";
             }
 
-            if (string.IsNullOrWhiteSpace(data.Hab_Form_Estado))
+            return null;
+        }
+
+        private static string? ValidarEstado(string? estado)
+        {
+            if (string.IsNullOrWhiteSpace(estado))
             {
                 return "El estado del formulario es obligatorio.";
             }
 
-            var estado = data.Hab_Form_Estado.Trim().ToUpperInvariant();
+            estado = estado.Trim().ToUpperInvariant();
 
             if (estado != "HABILITADO" && estado != "DESHABILITADO")
             {
