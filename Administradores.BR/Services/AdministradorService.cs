@@ -294,7 +294,7 @@ namespace Administradores.BR.Services
                 );
             }
         }
-
+        // Restriccion de negocio que los datos del administrador general esten reservados y solo se pueda cambiar su contra
         private static string? ValidarRestriccionesDeAdministrador(bool esSuperAdmin, string dni, string tipoDni, string usuario)
         {
             if (!esSuperAdmin)
