@@ -102,7 +102,7 @@ app.UseCors("FrontendPolicy");
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint(
-            "/openapi/v1.json",
+            "../openapi/v1.json",
             "Administradores API v1");
     });
 //}
