@@ -31,7 +31,7 @@ async function cargarFormularios() {
         formularios.forEach(formulario => {
             const fila = document.createElement("tr");
 
-            // Guardamos el ID sin mostrarlo como columna.
+            // Guardo el ID sin mostrarlo como columna.
             fila.dataset.id = formulario.iD_Hab_Form;
 
             const año = document.createElement("td");
