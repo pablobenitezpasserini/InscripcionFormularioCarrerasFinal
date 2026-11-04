@@ -17,6 +17,9 @@ namespace Administradores.DA.Repositories
     /// </summary>
     public class HabilitacionFormularioRepository : IHabilitacionFormularioRepository
     {
+        /// <summary>
+        /// Cadena de conexion utilizada para establecer conexion con la base de datos.
+        /// </summary>
         private readonly string _connectionString;
 
         /// <summary>
