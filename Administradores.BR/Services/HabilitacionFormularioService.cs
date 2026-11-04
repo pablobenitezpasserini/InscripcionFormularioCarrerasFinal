@@ -18,7 +18,13 @@ namespace Administradores.BR.Services
     /// </summary>
     public class HabilitacionFormularioService : IHabilitacionFormularioService
     {
+        /// <summary>
+        /// Repositorio encargado de gestionas los formularios.
+        /// </summary>
         private readonly IHabilitacionFormularioRepository _repository;
+        /// <summary>
+        /// Validador encargado de comprobar los datos de los formularios.
+        /// </summary>
         private readonly IHabilitacionFormularioValidator _validador;
 
         /// <summary>

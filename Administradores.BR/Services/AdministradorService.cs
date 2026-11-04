@@ -18,7 +18,13 @@ namespace Administradores.BR.Services
     /// </summary>
     public class AdministradorService : IAdministradorService
     {
+        /// <summary>
+        /// Encargado de comprobar los datos de los administradores.
+        /// </summary>
         private readonly IAdministradorValidator _validador;
+        /// <summary>
+        /// Repositorio encargado de acceder y gestionar los datos de los administradores.
+        /// </summary>
         private readonly IAdministradorRepository _adminRepository;
 
         /// <summary>
