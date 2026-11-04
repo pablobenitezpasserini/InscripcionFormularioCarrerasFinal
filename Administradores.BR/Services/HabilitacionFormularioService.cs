@@ -70,6 +70,7 @@ namespace Administradores.BR.Services
             {
                 var formularios = await _repository.ListarAsync();
 
+                // Validar año unico
                 if (formularios.Any(f => f.Hab_Form_Año == data.Hab_Form_Año))
                 {
                     return Result<bool>.Fail(
@@ -77,6 +78,7 @@ namespace Administradores.BR.Services
                         ErrorType.Conflict);
                 }
 
+                // Validar cantidad maxima de formularios
                 if (formularios.Count() >= 2)
                 {
                     return Result<bool>.Fail(
@@ -84,7 +86,7 @@ namespace Administradores.BR.Services
                         ErrorType.Conflict);
                 }
 
-                var formulario = new HabilitacionFormulario
+                var nuevoFormulario = new HabilitacionFormulario
                 {
                     Hab_Form_Año = data.Hab_Form_Año,
                     Hab_Form_Fecha_Inicio = data.Hab_Form_Fecha_Inicio,
@@ -92,7 +94,7 @@ namespace Administradores.BR.Services
                     Hab_Form_Estado = "DESHABILITADO"
                 };
 
-                await _repository.CrearAsync(formulario);
+                await _repository.CrearAsync(nuevoFormulario);
 
                 return Result<bool>.Ok(true);
             }
