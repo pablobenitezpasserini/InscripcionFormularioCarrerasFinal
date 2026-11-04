@@ -69,7 +69,7 @@ function cargarAdministrador() {
         document.getElementById("nombreUsuario").value =
             adminOriginal.admin_Nom_Usuario ?? "";
 
-        // La implementación actual del service exige una contraseña.
+        // La implementacion actual del service exige una contraseña.
         document.getElementById("contrasena").value =
             adminOriginal.admin_Contra ?? "";
 
@@ -118,7 +118,7 @@ formulario.addEventListener("submit", async function (e) {
             "Administrador modificado correctamente."
         );
 
-        // Eliminar los datos temporales de la edición
+        // Eliminar los datos temporales de la edicion
         sessionStorage.removeItem("adminEditar");
 
         setTimeout(() => {
