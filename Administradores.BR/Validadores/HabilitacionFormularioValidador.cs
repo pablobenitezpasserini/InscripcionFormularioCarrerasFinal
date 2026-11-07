@@ -63,7 +63,15 @@ namespace Administradores.BR.Validadores
 
             return null;
         }
-
+        /// <summary>
+        /// Valida que las fechas de inicio y cierre del período de inscripción sean válidas.
+        /// </summary>
+        /// <param name="fechaInicio">Fecha de inicio del período de inscripción.</param>
+        /// <param name="fechaCierre">Fecha de cierre del período de inscripción.</param>
+        /// <returns>
+        /// Un mensaje descriptivo si alguna de las fechas no cumple con las condiciones establecidas;
+        /// de lo contrario, <see langword="null"/>.
+        /// </returns>
         private static string? ValidarFechas(DateTime fechaInicio, DateTime fechaCierre)
         {
             if (fechaInicio == default)
@@ -83,7 +91,14 @@ namespace Administradores.BR.Validadores
 
             return null;
         }
-
+        /// <summary>
+        /// Valida que el estado del formulario sea obligatorio y corresponda a uno de los valores permitidos.
+        /// </summary>
+        /// <param name="estado">Estado que se desea validar.</param>
+        /// <returns>
+        /// Un mensaje descriptivo si el estado no cumple con las condiciones establecidas;
+        /// de lo contrario, <see langword="null"/>.
+        /// </returns>
         private static string? ValidarEstado(string? estado)
         {
             if (string.IsNullOrWhiteSpace(estado))

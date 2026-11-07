@@ -40,6 +40,19 @@ namespace Administradores.BR.Validadores
                 admin.Admin_Contra);
         }
 
+        /// <summary>
+        /// Valida los datos proporcionados para un administrador, verificando que los campos obligatorios
+        /// estén completos, que el DNI tenga un formato válido y que los campos respeten las longitudes permitidas.
+        /// </summary>
+        /// <param name="nombre">Nombre y apellido del administrador.</param>
+        /// <param name="dni">Número de documento de identidad del administrador.</param>
+        /// <param name="tipoDni">Tipo de documento de identidad del administrador.</param>
+        /// <param name="usuario">Nombre de usuario para iniciar sesión.</param>
+        /// <param name="contraseña">Contraseña de acceso del administrador.</param>
+        /// <returns>
+        /// Un mensaje descriptivo si alguno de los datos no cumple con las condiciones establecidas;
+        /// de lo contrario, <see langword="null"/>.
+        /// </returns>
         private static string? ValidarDatos(string? nombre, string? dni, string? tipoDni, string? usuario, string? contraseña)
         {
             var errorObligatorios = ValidarCamposObligatorios(
@@ -69,6 +82,19 @@ namespace Administradores.BR.Validadores
                 contraseña!);
         }
 
+        /// <summary>
+        /// Verifica que todos los campos necesarios para registrar o modificar un administrador
+        /// contengan valores y no estén vacíos o compuestos únicamente por espacios en blanco.
+        /// </summary>
+        /// <param name="nombre">Nombre y apellido del administrador.</param>
+        /// <param name="dni">Número de documento de identidad del administrador.</param>
+        /// <param name="tipoDni">Tipo de documento de identidad del administrador.</param>
+        /// <param name="usuario">Nombre de usuario para iniciar sesión.</param>
+        /// <param name="contraseña">Contraseña de acceso del administrador.</param>
+        /// <returns>
+        /// Un mensaje descriptivo correspondiente al primer campo obligatorio que no cumpla la validación;
+        /// de lo contrario, <see langword="null"/>.
+        /// </returns>
         private static string? ValidarCamposObligatorios(string? nombre, string? dni, string? tipoDni, string? usuario, string? contraseña)
         {
             if (string.IsNullOrWhiteSpace(nombre))
@@ -88,6 +114,15 @@ namespace Administradores.BR.Validadores
 
             return null;
         }
+
+        /// <summary>
+        /// Valida que el DNI contenga exclusivamente caracteres numéricos y tenga exactamente 8 caracteres.
+        /// </summary>
+        /// <param name="dni">Número de documento de identidad que se desea validar.</param>
+        /// <returns>
+        /// Un mensaje descriptivo si el DNI no cumple con el formato establecido;
+        /// de lo contrario, <see langword="null"/>.
+        /// </returns>
         private static string? ValidarFormatoDni(string dni)
         {
             if (dni.Any(c => c < '0' || c > '9'))
@@ -98,6 +133,19 @@ namespace Administradores.BR.Validadores
 
             return null;
         }
+
+        /// <summary>
+        /// Verifica que la longitud de los datos del administrador no supere los límites establecidos
+        /// para cada campo.
+        /// </summary>
+        /// <param name="nombre">Nombre y apellido del administrador.</param>
+        /// <param name="tipoDni">Tipo de documento de identidad del administrador.</param>
+        /// <param name="usuario">Nombre de usuario para iniciar sesión.</param>
+        /// <param name="contraseña">Contraseña de acceso del administrador.</param>
+        /// <returns>
+        /// Un mensaje descriptivo si alguno de los campos supera la longitud máxima permitida;
+        /// de lo contrario, <see langword="null"/>.
+        /// </returns>
         private static string? ValidarLongitudes(string nombre, string tipoDni, string usuario, string contraseña)
         {
             if (nombre.Length > 100)
