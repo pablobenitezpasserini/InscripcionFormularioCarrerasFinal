@@ -7,11 +7,19 @@ using Administradores.Models.Formularios.DTOs;
 
 namespace AdministradoresTest.BR
 {
+    /// <summary>
+    /// Contiene las pruebas unitarias de la clase <see cref="HabilitacionFormularioValidador"/>.
+    /// </summary>
     [TestClass]
     public class HabilitacionFormularioValidadorTest
     {
+        /// <summary>
+        /// Instancia del validador utilizada para ejecutar las pruebas unitarias.
+        /// </summary>
         private HabilitacionFormularioValidador _validador = null!;
-
+        /// <summary>
+        /// Inicializa una nueva instancia del validador antes de la ejecución de cada prueba.
+        /// </summary>
         [TestInitialize]
         public void Inicializar()
         {
