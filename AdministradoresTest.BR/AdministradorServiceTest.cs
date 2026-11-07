@@ -9,16 +9,33 @@ using Moq;
 
 namespace AdministradoresTest.BR;
 
+/// <summary>
+/// Contiene las pruebas unitarias de la clase <see cref="AdministradorService"/>.
+/// </summary>
 [TestClass]
 public sealed class AdministradorServiceTest
 {
+    /// <summary>
+    /// Simulación del validador de administradores utilizada para verificar las validaciones del servicio.
+    /// </summary>
     private Mock<IAdministradorValidator> _adminValidadorMock = null!;
+
+    /// <summary>
+    /// Simulación del repositorio de administradores utilizada para verificar las operaciones de acceso a datos.
+    /// </summary>
     private Mock<IAdministradorRepository> _adminRepositoryMock = null!;
+
+    /// <summary>
+    /// Instancia del servicio de administradores utilizada para ejecutar las pruebas unitarias.
+    /// </summary>
     private AdministradorService _service = null!;
 
     #region Helpers
-    // Por lo que googlie con el decorador TestInitialize hace que el metodo
-    // que lo tenga se ejecute siempre antes de cada test
+
+    /// <summary>
+    /// Inicializa los mocks del validador y del repositorio, y crea una instancia del servicio
+    /// antes de la ejecución de cada prueba.
+    /// </summary>
     [TestInitialize]
     public void Inicializar()
     {
@@ -31,6 +48,11 @@ public sealed class AdministradorServiceTest
         );
     }
 
+    /// <summary>
+    /// Crea y devuelve un DTO de creación de administrador con datos válidos
+    /// para utilizar en las pruebas unitarias.
+    /// </summary>
+    /// <returns>Un <see cref="CrearAdminDto"/> con datos de administrador válidos.</returns>
     private static CrearAdminDto CrearAdminDatosCorrectos()
     {
         return new CrearAdminDto
@@ -43,6 +65,11 @@ public sealed class AdministradorServiceTest
         };
     }
 
+    /// <summary>
+    /// Crea y devuelve un DTO de edición de administrador con datos válidos
+    /// para utilizar en las pruebas unitarias.
+    /// </summary>
+    /// <returns>Un <see cref="EditarAdminDto"/> con datos de administrador válidos.</returns>
     private static EditarAdminDto EditarAdminDatosCorrectos()
     {
         return new EditarAdminDto
@@ -55,24 +82,38 @@ public sealed class AdministradorServiceTest
         };
     }
 
-    private static void AssertResultadoError(
-        Result<bool> resultado,
-        ErrorType tipoError,
-        string mensaje)
+    /// <summary>
+    /// Verifica que un resultado de tipo <see cref="Result{T}"/> indique un fallo,
+    /// con el tipo de error y el mensaje esperados.
+    /// </summary>
+    /// <param name="resultado">Resultado de la operación que se desea verificar.</param>
+    /// <param name="tipoError">Tipo de error esperado.</param>
+    /// <param name="mensaje">Mensaje de error esperado.</param>
+    private static void AssertResultadoError(Result<bool> resultado, ErrorType tipoError, string mensaje)
     {
         Assert.IsFalse(resultado.Success);
         Assert.AreEqual(tipoError, resultado.ErrorType);
         Assert.AreEqual(mensaje, resultado.Error);
     }
 
-    private static void AssertResultadoExitoso(
-    Result<bool> resultado)
+    /// <summary>
+    /// Verifica que un resultado de tipo <see cref="Result{T}"/> indique una operación exitosa
+    /// y que su dato devuelto sea verdadero.
+    /// </summary>
+    /// <param name="resultado">Resultado de la operación que se desea verificar.</param>
+    private static void AssertResultadoExitoso(Result<bool> resultado)
     {
         Assert.IsTrue(resultado.Success);
         Assert.IsTrue(resultado.Data);
     }
     #endregion
+
     #region Test de listar
+    /// <summary>
+    /// Verifica que, cuando el repositorio devuelve correctamente la lista de administradores,
+    /// el servicio retorne un resultado exitoso con los mismos datos y sin errores.
+    /// También comprueba que el método del repositorio se invoque una sola vez.
+    /// </summary>
     [TestMethod]
     public async Task ListarAsync_CuandoRepositorioRespondeCorrectamente_RetornaResultadoExitoso()
     {
@@ -101,6 +142,12 @@ public sealed class AdministradorServiceTest
         );
     }
 
+    /// <summary>
+    /// Verifica que, cuando el repositorio lanza una <see cref="DataAccessException"/>
+    /// al intentar obtener los administradores, el servicio retorne un error inesperado
+    /// con el mensaje correspondiente.
+    /// También comprueba que el repositorio se invoque una sola vez.
+    /// </summary>
     [TestMethod]
     public async Task ListarAsync_CuandoRepositorioLanzaDataAccessException_RetornaErrorUnexpected()
     {
@@ -135,7 +182,13 @@ public sealed class AdministradorServiceTest
         );
     }
     #endregion
+
     #region Test de crear
+    /// <summary>
+    /// Verifica que, cuando el validador devuelve un error al validar los datos del administrador,
+    /// el servicio retorne un error de tipo Validation y no realice consultas ni operaciones
+    /// de creación en el repositorio.
+    /// </summary>
     [TestMethod]
     public async Task CrearAsync_CuandoValidadorDevuelveError_RetornaValidation()
     {
@@ -169,6 +222,11 @@ public sealed class AdministradorServiceTest
         Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando se intenta registrar un administrador con el nombre de usuario
+    /// reservado para el super administrador, el servicio retorne un error de tipo Conflict.
+    /// Contempla distintas combinaciones de mayúsculas y minúsculas.
+    /// </summary>
     [TestMethod]
     [DataRow("admin")]
     [DataRow("ADMIN")]
@@ -205,6 +263,11 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando se intenta registrar un administrador con el DNI reservado
+    /// para el super administrador y el tipo de documento correspondiente,
+    /// el servicio retorne un error de tipo Conflict sin realizar consultas ni crear el administrador.
+    /// </summary>
     [TestMethod]
     public async Task CrearAsync_CuandoDniEstaReservado_RetornaConflict()
     {
@@ -238,6 +301,10 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando se utiliza el DNI reservado con un tipo de documento distinto
+    /// al DNI, el servicio permita continuar con el registro si no existen otros conflictos.
+    /// </summary>
     [TestMethod]
     public async Task CrearAsync_CuandoDniReservadoPeroTipoDistinto_RetornaResultadoDeCreacion()
     {
@@ -273,6 +340,11 @@ public sealed class AdministradorServiceTest
             Times.Once);
     }
 
+    /// <summary>
+    /// Verifica que, cuando ya existe un administrador con el mismo DNI y tipo de documento,
+    /// el servicio retorne un error de tipo Conflict y no continúe con la verificación del usuario
+    /// ni con la creación del administrador.
+    /// </summary>
     [TestMethod]
     public async Task CrearAsync_CuandoDniYaExiste_RetornaConflict()
     {
@@ -308,6 +380,11 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando ya existe un administrador con el nombre de usuario ingresado,
+    /// el servicio retorne un error de tipo Conflict y no realice la creación.
+    /// También comprueba que se hayan realizado las consultas de existencia del DNI y del usuario.
+    /// </summary>
     [TestMethod]
     public async Task CrearAsync_CuandoUsuarioYaExiste_RetornaConflict()
     {
@@ -348,6 +425,11 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando los datos son válidos y no existen conflictos de DNI ni de usuario,
+    /// el servicio cree correctamente el administrador con los datos proporcionados,
+    /// aplicando el recorte de espacios en los campos correspondientes.
+    /// </summary>
     [TestMethod]
     public async Task CrearAsync_CuandoDatosSonCorrectos_CreaAdministrador()
     {
@@ -389,6 +471,10 @@ public sealed class AdministradorServiceTest
             Times.Once);
     }
 
+    /// <summary>
+    /// Verifica que, cuando ocurre un error de persistencia al consultar si el DNI ya existe,
+    /// el servicio retorne un error de tipo Unexpected y no continúe con las demás operaciones.
+    /// </summary>
     [TestMethod]
     public async Task CrearAsync_CuandoFallaConsultaDni_RetornaUnexpected()
     {
@@ -422,6 +508,10 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando ocurre un error de persistencia al consultar si el nombre de usuario
+    /// ya existe, el servicio retorne un error de tipo Unexpected y no intente crear el administrador.
+    /// </summary>
     [TestMethod]
     public async Task CrearAsync_CuandoFallaConsultaUsuario_RetornaUnexpected()
     {
@@ -456,6 +546,11 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando ocurre un error de persistencia durante la creación del administrador
+    /// en el repositorio, el servicio retorne un error de tipo Unexpected.
+    /// También comprueba que se haya intentado ejecutar la operación de creación una sola vez.
+    /// </summary>
     [TestMethod]
     public async Task CrearAsync_CuandoFallaCreacionEnRepositorio_RetornaUnexpected()
     {
@@ -494,7 +589,13 @@ public sealed class AdministradorServiceTest
             Times.Once);
     }
     #endregion
+
     #region Test de editar
+    /// <summary>
+    /// Verifica que, cuando se intenta editar un administrador con un ID menor o igual a cero,
+    /// el servicio retorne un error de tipo Validation y no ejecute las validaciones
+    /// ni consulte la existencia del administrador.
+    /// </summary>
     [TestMethod]
     [DataRow(0)]
     [DataRow(-1)]
@@ -519,6 +620,11 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando el validador devuelve un error al validar los datos de edición,
+    /// el servicio retorne un error de tipo Validation y no consulte la existencia
+    /// del administrador ni intente modificarlo.
+    /// </summary>
     [TestMethod]
     public async Task EditarAsync_CuandoValidadorDevuelveError_RetornaValidation()
     {
@@ -545,6 +651,11 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando no existe un administrador con el ID indicado,
+    /// el servicio retorne un error de tipo NotFound y no continúe con las demás
+    /// verificaciones ni intente modificarlo.
+    /// </summary>
     [TestMethod]
     public async Task EditarAsync_CuandoAdministradorNoExiste_RetornaNotFound()
     {
@@ -582,6 +693,11 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando ocurre un error de persistencia al consultar si el administrador
+    /// existe, el servicio retorne un error de tipo Unexpected y no continúe con las
+    /// verificaciones ni intente realizar la edición.
+    /// </summary>
     [TestMethod]
     public async Task EditarAsync_CuandoFallaConsultaExistencia_RetornaUnexpected()
     {
@@ -614,6 +730,11 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando un administrador común intenta utilizar el nombre de usuario
+    /// reservado para el super administrador, el servicio retorne un error de tipo Conflict.
+    /// Contempla distintas combinaciones de mayúsculas y minúsculas.
+    /// </summary>
     [TestMethod]
     [DataRow("admin")]
     [DataRow("ADMIN")]
@@ -656,6 +777,11 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando un administrador común intenta utilizar el DNI reservado
+    /// para el super administrador junto con el tipo de documento DNI,
+    /// el servicio retorne un error de tipo Conflict y no realice la edición.
+    /// </summary>
     [TestMethod]
     public async Task EditarAsync_CuandoAdminNormalUsaDniReservado_RetornaConflict()
     {
@@ -695,6 +821,11 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando un administrador común utiliza el DNI reservado
+    /// con un tipo de documento distinto de DNI, el servicio permita continuar
+    /// con la edición si no existen otros conflictos.
+    /// </summary>
     [TestMethod]
     public async Task EditarAsync_CuandoDniReservadoTieneOtroTipo_ContinuaEdicion()
     {
@@ -739,6 +870,11 @@ public sealed class AdministradorServiceTest
             Times.Once);
     }
 
+    /// <summary>
+    /// Verifica que, cuando el super administrador intenta modificar su DNI,
+    /// el servicio retorne un error de tipo Conflict y no consulte la existencia
+    /// de otros DNI ni ejecute la edición.
+    /// </summary>
     [TestMethod]
     public async Task EditarAsync_CuandoSuperAdminIntentaCambiarDni_RetornaConflict()
     {
@@ -779,6 +915,10 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando el super administrador intenta modificar su tipo de DNI,
+    /// el servicio retorne un error de tipo Conflict y no ejecute la edición.
+    /// </summary>
     [TestMethod]
     public async Task EditarAsync_CuandoSuperAdminIntentaCambiarTipoDni_RetornaConflict()
     {
@@ -812,6 +952,11 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando el super administrador intenta modificar su nombre de usuario,
+    /// el servicio retorne un error de tipo Conflict y no continúe con las verificaciones
+    /// de DNI ni ejecute la edición.
+    /// </summary>
     [TestMethod]
     public async Task EditarAsync_CuandoSuperAdminIntentaCambiarUsuario_RetornaConflict()
     {
@@ -852,6 +997,11 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que el super administrador pueda editar sus datos cuando conserva
+    /// el DNI, el tipo de documento y el nombre de usuario reservados,
+    /// independientemente de las mayúsculas y minúsculas utilizadas.
+    /// </summary>
     [TestMethod]
     public async Task EditarAsync_CuandoSuperAdminConservaDatosReservados_PermiteEditar()
     {
@@ -901,6 +1051,11 @@ public sealed class AdministradorServiceTest
             Times.Once);
     }
 
+    /// <summary>
+    /// Verifica que, cuando el DNI y el tipo de documento ingresados ya pertenecen
+    /// a otro administrador, el servicio retorne un error de tipo Conflict
+    /// y no continúe con la verificación del nombre de usuario ni realice la edición.
+    /// </summary>
     [TestMethod]
     public async Task EditarAsync_CuandoDniYaPerteneceAOtroAdmin_RetornaConflict()
     {
@@ -939,6 +1094,10 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando el nombre de usuario ingresado ya pertenece a otro administrador,
+    /// el servicio retorne un error de tipo Conflict y no realice la modificación.
+    /// </summary>
     [TestMethod]
     public async Task EditarAsync_CuandoUsuarioYaPerteneceAOtroAdmin_RetornaConflict()
     {
@@ -977,6 +1136,11 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando los datos son válidos y no existen conflictos de DNI ni de usuario,
+    /// el servicio modifique correctamente el administrador con los datos proporcionados.
+    /// También comprueba que la entidad enviada al repositorio contenga los valores esperados.
+    /// </summary>
     [TestMethod]
     public async Task EditarAsync_CuandoDatosSonCorrectos_EditaAdministrador()
     {
@@ -1025,6 +1189,11 @@ public sealed class AdministradorServiceTest
             Times.Once);
     }
 
+    /// <summary>
+    /// Verifica que, cuando ocurre un error de persistencia al consultar si el DNI
+    /// ya pertenece a otro administrador, el servicio retorne un error de tipo Unexpected
+    /// y no continúe con la consulta del usuario ni con la edición.
+    /// </summary>
     [TestMethod]
     public async Task EditarAsync_CuandoFallaConsultaDni_RetornaUnexpected()
     {
@@ -1065,6 +1234,11 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando ocurre un error de persistencia al consultar si el nombre
+    /// de usuario ya pertenece a otro administrador, el servicio retorne un error
+    /// de tipo Unexpected y no intente realizar la edición.
+    /// </summary>
     [TestMethod]
     public async Task EditarAsync_CuandoFallaConsultaUsuario_RetornaUnexpected()
     {
@@ -1105,6 +1279,11 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando ocurre un error de persistencia durante la modificación
+    /// del administrador en el repositorio, el servicio retorne un error de tipo Unexpected.
+    /// También comprueba que se haya intentado ejecutar la operación de edición una sola vez.
+    /// </summary>
     [TestMethod]
     public async Task EditarAsync_CuandoFallaEdicionEnRepositorio_RetornaUnexpected()
     {
@@ -1149,7 +1328,12 @@ public sealed class AdministradorServiceTest
             Times.Once);
     }
     #endregion
+
     #region Test de eliminar
+    /// <summary>
+    /// Verifica que, al intentar eliminar un administrador con un ID inválido (cero o negativo),
+    /// el servicio retorne un error de validación y no realice consultas ni operaciones de eliminación en el repositorio.
+    /// </summary>
     [TestMethod]
     [DataRow(0)]
     [DataRow(-1)]
@@ -1173,6 +1357,11 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando el administrador indicado no existe,
+    /// el servicio retorne un error de tipo <see cref="ErrorType.NotFound"/>
+    /// y no intente consultar si es superadministrador ni eliminarlo.
+    /// </summary>
     [TestMethod]
     public async Task EliminarAsync_CuandoAdministradorNoExiste_RetornaNotFound()
     {
@@ -1198,7 +1387,10 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
-
+    /// <summary>
+    /// Verifica que, cuando ocurre un error de persistencia al consultar la existencia del administrador,
+    /// el servicio retorne un error inesperado y no continúe con las demás operaciones del repositorio.
+    /// </summary>
     [TestMethod]
     public async Task EliminarAsync_CuandoFallaConsultaExistencia_RetornaUnexpected()
     {
@@ -1226,6 +1418,11 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que el servicio impida eliminar al superadministrador,
+    /// retornando un error de tipo <see cref="ErrorType.Conflict"/>
+    /// sin ejecutar la operación de eliminación en el repositorio.
+    /// </summary>
     [TestMethod]
     public async Task EliminarAsync_CuandoEsSuperAdmin_RetornaConflict()
     {
@@ -1251,6 +1448,10 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando ocurre un error de persistencia al consultar si el administrador
+    /// es superadministrador, el servicio retorne un error inesperado y no intente eliminarlo.
+    /// </summary>
     [TestMethod]
     public async Task EliminarAsync_CuandoFallaConsultaSuperAdmin_RetornaUnexpected()
     {
@@ -1278,6 +1479,10 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando el administrador existe y no es superadministrador,
+    /// el servicio realice la eliminación correctamente y confirme las llamadas esperadas al repositorio.
+    /// </summary>
     [TestMethod]
     public async Task EliminarAsync_CuandoAdministradorExisteYNoEsSuperAdmin_EliminaAdministrador()
     {
@@ -1315,6 +1520,10 @@ public sealed class AdministradorServiceTest
             Times.Once);
     }
 
+    /// <summary>
+    /// Verifica que, cuando ocurre un error de persistencia durante la eliminación del administrador,
+    /// el servicio retorne un error inesperado y confirme que la operación de eliminación fue intentada.
+    /// </summary>
     [TestMethod]
     public async Task EliminarAsync_CuandoFallaEliminacionEnRepositorio_RetornaUnexpected()
     {
@@ -1346,7 +1555,13 @@ public sealed class AdministradorServiceTest
             Times.Once);
     }
     #endregion
+
     #region Test de login
+
+    /// <summary>
+    /// Verifica que, cuando el nombre de usuario está vacío o contiene únicamente espacios,
+    /// el servicio retorne un error de validación y no intente realizar el inicio de sesión en el repositorio.
+    /// </summary>
     [TestMethod]
     public async Task LoguearAsync_UsuarioVacio_RetornaErrorDeValidacion()
     {
@@ -1371,6 +1586,10 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando la contraseña está vacía,
+    /// el servicio retorne un error de validación y no intente realizar el inicio de sesión en el repositorio.
+    /// </summary>
     [TestMethod]
     public async Task LoguearAsync_ContrasenaVacia_RetornaErrorDeValidacion()
     {
@@ -1395,6 +1614,11 @@ public sealed class AdministradorServiceTest
             Times.Never);
     }
 
+    /// <summary>
+    /// Verifica que, cuando las credenciales son correctas,
+    /// el servicio retorne un resultado exitoso con el mensaje devuelto por el repositorio
+    /// y confirme que la operación de inicio de sesión se ejecutó una vez.
+    /// </summary>
     [TestMethod]
     public async Task LoguearAsync_CredencialesCorrectas_RetornaResultadoExitoso()
     {
@@ -1421,6 +1645,11 @@ public sealed class AdministradorServiceTest
             Times.Once);
     }
 
+    /// <summary>
+    /// Verifica que, cuando el repositorio indica que las credenciales son incorrectas,
+    /// el servicio retorne un error de tipo <see cref="ErrorType.Unauthorized"/>
+    /// con el mensaje correspondiente.
+    /// </summary>
     [TestMethod]
     public async Task LoguearAsync_CredencialesIncorrectas_RetornaErrorNoAutorizado()
     {
@@ -1444,6 +1673,10 @@ public sealed class AdministradorServiceTest
         Assert.AreEqual(ErrorType.Unauthorized, resultado.ErrorType);
     }
 
+    /// <summary>
+    /// Verifica que, cuando ocurre un error de persistencia durante el inicio de sesión,
+    /// el servicio retorne un error inesperado con el mensaje correspondiente.
+    /// </summary>
     [TestMethod]
     public async Task LoguearAsync_ErrorDePersistencia_RetornaErrorInesperado()
     {
@@ -1466,6 +1699,11 @@ public sealed class AdministradorServiceTest
         Assert.AreEqual(ErrorType.Unexpected, resultado.ErrorType);
     }
 
+    /// <summary>
+    /// Verifica que, cuando el nombre de usuario contiene espacios al inicio o al final,
+    /// el servicio recorte esos espacios antes de enviar el usuario al repositorio
+    /// y procese correctamente el inicio de sesión.
+    /// </summary>
     [TestMethod]
     public async Task LoguearAsync_UsuarioConEspacios_EnviaUsuarioRecortadoAlRepositorio()
     {
@@ -1490,4 +1728,5 @@ public sealed class AdministradorServiceTest
             Times.Once);
     }
     #endregion
+
 }
